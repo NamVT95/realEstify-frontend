@@ -4,6 +4,7 @@ import { useAppSelector } from "@/hooks/useStore"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { formatPrice } from "@/lib/formatting"
 import { Button } from "@/components/ui/button"
+import BookingForm from "./bookingForm"
 
 export default function ViewDetailsPage() {
     const selectedProperty = useAppSelector(state => state.selectedProperty)
@@ -15,7 +16,7 @@ export default function ViewDetailsPage() {
     return (
         <FullLayout>
             <div className='container my-10 space-y-4'>
-                <section className="flex items-center justify-center font-bold text-2xl pb-5">
+                <section className="flex items-center justify-center font-semibold text-2xl pb-5">
                     Real Estate Listing
                 </section>
                 <div className="grid grid-cols-3 gap-4">
@@ -73,10 +74,12 @@ export default function ViewDetailsPage() {
                             <div className="flex justify-end">
                                 <Button type="button" className=''>Schedule a viewing</Button>
                             </div>
-
                         </div>
                     </Card>
                 </div>
+                <Card>
+                    <BookingForm />
+                </Card>
             </div>
         </FullLayout>
     )
