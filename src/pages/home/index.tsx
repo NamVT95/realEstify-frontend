@@ -1,6 +1,6 @@
 import FullLayout from '@/FullLayout'
 import Hero from './components/hero'
-import FeatureList from '@/components/FeatureList'
+import PropertiesList from '@/components/PropertiesList'
 import { useAppSelector } from '@/hooks/useStore'
 
 
@@ -10,7 +10,7 @@ export default function HomePage() {
   return (
     <FullLayout>
       <Hero />
-      <FeatureList properties={properties} />
+      <PropertiesList properties={properties} />
     </FullLayout>
   )
 }

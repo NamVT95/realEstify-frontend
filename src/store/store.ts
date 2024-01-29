@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import propertiesSlice from './feature/propertiesSlice'
+import selectedProperties from './feature/selectedProperty'
 
 export const store = configureStore({
   reducer: {
     properties: propertiesSlice,
+    selectedProperty: selectedProperties,
   },
 })
 
