@@ -61,7 +61,7 @@ export default function PropertyCard({ property }: PropertysCardProps) {
                         {formatPrice(property.price)}
                     </div>
                     <div className="text-end font-medium text-blue-500 select-none hover:cursor-pointer">
-                        <Link to={`/detail/${property.title}`} onClick={handleSelectedProperty}>View Details</Link>
+                        <Link to={`/detail/${property.property_id}`} onClick={handleSelectedProperty}>View Details</Link>
                     </div>
                 </div>
             </CardContent>
