@@ -3,8 +3,29 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { postBookingProperties } from "@/lib/api/booking";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { useToast } from "@/components/ui/use-toast"
+import { notification } from 'antd'
 
-const BookingForm = () => {
+
+interface BookingFormProps {
+    propertyId: number;
+    deposit: number;
+}
+
+function BookingForm({ propertyId, deposit }: BookingFormProps) {
+    const { toast } = useToast()
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -18,11 +39,41 @@ const BookingForm = () => {
             phone: Yup.string().required('Phone number is required'),
             message: Yup.string().required('Message is required'),
         }),
-        onSubmit: (values) => {
-            // Handle form submission here
-            console.log(values);
+        onSubmit: async (values) => {
+            try {
+                const bookingData = {
+                    propertyId: propertyId,
+                    email: values.email,
+                    phone: values.phone,
+                    deposit: deposit,
+                };
+
+                const result = await postBookingProperties(bookingData);
+                console.log(result.data.message);
+                notification.success({
+                    message: 'Booking successful',
+                    description: result.data.message,
+                    placement: 'topRight',
+                    duration: 2,
+                })
+                if (result.error) {
+                    console.error("Error:", result.error);
+                    notification.error({
+                        message: 'Booking failed',
+                        description: result.error,
+                        placement: 'topRight',
+                        duration: 2,
+                    })
+                } else {
+                    console.log("Booking successful:", result.data);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
         },
     });
+
+    const isFormValid = Object.keys(formik.errors).length === 0 && Object.keys(formik.touched).length > 0;
 
     return (
         <form onSubmit={formik.handleSubmit} className="container my-10 space-y-4">
@@ -99,10 +150,29 @@ const BookingForm = () => {
                 ) : null}
             </div>
             <div className="flex justify-center">
-                <Button type="submit" className="w-full">
-                    Send
-                </Button>
+                <AlertDialog>
+                    <AlertDialogTrigger className={`w-full ${!isFormValid ? 'cursor-not-allowed' : ''}`} disabled={!isFormValid}>
+                        <Button className='w-full' disabled={!isFormValid} type='button'>
+                            Send
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This action cannot be undone
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction type='submit' onClick={() => {
+                                formik.handleSubmit();
+                            }}>Okay</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
+
         </form>
     );
 };
