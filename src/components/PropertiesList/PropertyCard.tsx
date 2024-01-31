@@ -4,7 +4,6 @@ import { formatPrice } from "@/lib/formatting";
 import { Link } from "react-router-dom";
 import { propertyInterface } from "@/interface/properties.interface";
 import { Bed, Bath, Grid2X2 } from 'lucide-react';
-import { useAppDispatch } from "@/hooks/useStore";
 
 interface PropertysCardProps {
     property: propertyInterface;
@@ -23,7 +22,6 @@ const IconMapping: IconMappingType = {
 }
 
 export default function PropertyCard({ property }: PropertysCardProps) {
-    const dispatch = useAppDispatch()
     return (
         <Card key={property.title}>
             <CardHeader>

@@ -24,7 +24,7 @@ interface BookingFormProps {
     deposit: number;
 }
 
-function BookingForm({ propertyId, deposit }: BookingFormProps) {
+function BookingForm({ propertyId }: BookingFormProps) {
     const { toast } = useToast()
     const formik = useFormik({
         initialValues: {
@@ -32,11 +32,13 @@ function BookingForm({ propertyId, deposit }: BookingFormProps) {
             email: '',
             phone: '',
             message: '',
+            deposit: 50000000,
         },
         validationSchema: Yup.object({
-            name: Yup.string().required('Name is required'),
+            name: Yup.string().min(3, 'Name must be at least 3 characters').required('Name is required'),
             email: Yup.string().email('Invalid email address').required('Email is required'),
-            phone: Yup.string().required('Phone number is required'),
+            phone: Yup.string().min(10, "Not a valid phone number").matches(/^[0-9]+$/, 'Phone must be a number').required('Phone number is required'),
+            deposit: Yup.number().min(50000000, 'Deposit must be at least 50,000,000 VND').required('Deposit is required'),
             message: Yup.string().required('Message is required'),
         }),
         onSubmit: async (values) => {
@@ -45,7 +47,7 @@ function BookingForm({ propertyId, deposit }: BookingFormProps) {
                     propertyId: propertyId,
                     email: values.email,
                     phone: values.phone,
-                    deposit: deposit,
+                    deposit: values.deposit,
                 };
 
                 const result = await postBookingProperties(bookingData);
@@ -75,10 +77,20 @@ function BookingForm({ propertyId, deposit }: BookingFormProps) {
 
     const isFormValid = Object.keys(formik.errors).length === 0 && Object.keys(formik.touched).length > 0;
 
+    const handleIncrease = () => {
+        formik.setFieldValue('deposit', formik.values.deposit + 5000000);
+    };
+
+    const handleDecrease = () => {
+        // Ensure the deposit doesn't go below the minimum value
+        const newDeposit = Math.max(formik.values.deposit - 5000000, 50000000);
+        formik.setFieldValue('deposit', newDeposit);
+    };
+
     return (
         <form onSubmit={formik.handleSubmit} className="container my-10 space-y-4">
             <div className="flex justify-center items-center text-2xl font-semibold">
-                Contact us
+                Booking
             </div>
             <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -130,6 +142,28 @@ function BookingForm({ propertyId, deposit }: BookingFormProps) {
                 {formik.touched.phone && formik.errors.phone ? (
                     <div className="text-red-500">{formik.errors.phone}</div>
                 ) : null}
+            </div>
+            <div>
+                <label htmlFor="deposit">Deposit</label>
+                <Input
+                    type="number"
+                    id="deposit"
+                    name="deposit"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.deposit}
+                    min={50000000}
+                    step={5000000}
+                />
+                {formik.touched.deposit && formik.errors.deposit ? (
+                    <div className="text-red-500">{formik.errors.deposit}</div>
+                ) : null}
+                <div className='flex gap-4 pt-2'>
+                    <Button onClick={handleDecrease} type='button'>-</Button>
+                    <Button onClick={handleIncrease} type='button'>+</Button>
+                </div>
+
+
             </div>
             <div>
                 <label htmlFor="message" className="block text-sm font-medium text-gray-700">
