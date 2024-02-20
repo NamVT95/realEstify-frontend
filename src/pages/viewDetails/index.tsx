@@ -4,25 +4,27 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { formatPrice } from "@/lib/formatting"
 import { Button } from "@/components/ui/button"
 import BookingForm from "./bookingForm"
-import { getPropertyById } from "@/lib/api/properties"
-import { propertyInterface } from "@/interface/properties.interface"
 import { useParams } from "react-router-dom"
+import { ProjectInterface } from "@/interface/projects.interface"
+import { getProjectById } from "@/lib/api/project"
+import { Building2, UsersRound, MapPin, Home, Store, LandPlot, } from 'lucide-react';
 export default function ViewDetailsPage() {
     const params = useParams<{ id: string }>();
-    const propertyId = params.id ? parseInt(params.id, 10) : 0;
+    const projectId = params.id ? parseInt(params.id, 10) : 0;
 
-    const [property, setProperty] = useState<propertyInterface>()
+    const [project, setProject] = useState<ProjectInterface>()
 
     useEffect(() => {
         const fetchProperties = async () => {
-            const { data, error } = await getPropertyById(propertyId)
+            const { data, error } = await getProjectById(projectId)
             if (error) {
                 console.log(error)
                 return
             }
 
             if (data != null) {
-                setProperty(data?.data)
+                console.log(data?.data)
+                setProject(data?.data)
             }
         }
 
@@ -33,75 +35,94 @@ export default function ViewDetailsPage() {
 
     return (
         <FullLayout>
-            {property ? (
+            {project ? (
                 <div className='container my-10 space-y-4'>
-                    <section className="flex items-center justify-center font-semibold text-2xl pb-5">
-                        Real Estate Listing
-                    </section>
-                    <div className="grid grid-cols-3 gap-4">
-                        <div className="col-span-1">
-
-                            <Card key={property.title}>
-                                <CardHeader>
-                                    <img
-                                        src={property.image}
-                                        alt={property.title}
-                                        className='w-full object-[50%_75%] object-cover aspect-video brightness-75'
-                                    />
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="inline-flex flex-shrink-0 items-center  text-black  text-lg font-bold leading-7 pb-1">
-                                        {property.title}
+                    <div>
+                        <img src={project.Thumbnail} alt={project.Name} />
+                    </div>
+                    <div className="my-8 space-y-4">
+                        <div className="text-2xl font-semibold text-red-500">Overal:</div>
+                        <div className="">{project.Description}</div>
+                    </div>
+                    <div>
+                        <Card className="grid grid-cols-2 gap-4 py-8 px-16 space-y-4">
+                            <div className="col-span-1 flex  items-center gap-4">
+                                <Building2 size={32} />
+                                <div className="text-lg font-semibold">
+                                    Project name:
+                                    <div className="text-base font-normal">
+                                        {project.Name}
                                     </div>
-                                    <div className="inline-flex items-center pr-[6.5625rem] text-gray-600  text-sm leading-5 py-1">
-                                        {property.address}
-                                    </div>
-                                    <div className="flex items-center justify-between pt-3">
-                                        <div className=" text-2xl font-semibold text-end">
-                                            {formatPrice(property.price)}
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-
-                        </div>
-                        <Card className="col-span-2 box-border">
-
-                            <div className="flex items-center justify-center text-2xl font-semibold bg-primary color text-white py-1 rounded-tr-md rounded-tl-md">
-                                Detail
+                                </div>
                             </div>
-                            <div className="p-3">
-                                <div className="font-semibold">
-                                    Name: {property.title}
+                            <div className="col-span-1 flex  items-center gap-4">
+                                <UsersRound size={32} />
+                                <div className="text-lg font-semibold">
+                                    Invester name:
+                                    <div className="text-base font-normal">
+                                        {project.Investor.name}
+                                    </div>
                                 </div>
-                                <div className="py-2">
-                                    Location: {property.address}
+                            </div>
+                            <div className="col-span-1 flex  items-center gap-4">
+                                <MapPin size={32} />
+                                <div className="text-lg font-semibold">
+                                    Location:
+                                    <div className="text-base font-normal">
+                                        {project.Location}
+                                    </div>
                                 </div>
-                                <div className="py-2">
-                                    Price: {formatPrice(property.price)}
+                            </div>
+                            <div className="col-span-1 flex  items-center gap-4">
+                                <Building2 size={32} />
+                                <div className="text-lg font-semibold">
+                                    Project Type:
+                                    <div className="text-base font-normal">
+                                        {project.Type}
+                                    </div>
                                 </div>
-                                <div className="py-2">
-                                    Detail Description:
+                            </div>
+                            <div className="col-span-1 flex  items-center gap-4">
+                                <Home size={32} />
+                                <div className="text-lg font-semibold">
+                                    Apartments:
+                                    <div className="text-base font-normal">
+                                        {project.NumberOfApartments}
+                                    </div>
                                 </div>
-                                <div className="py-2">
-                                    Number of Bedrooms: {property.items[0].value}
+                            </div>
+                            <div className="col-span-1 flex  items-center gap-4">
+                                <Store size={32} />
+                                <div className="text-lg font-semibold">
+                                    Shops:
+                                    <div className="text-base font-normal">
+                                        {project.NumberOfShops}
+                                    </div>
                                 </div>
-                                <div className="py-2">
-                                    Number of Bathrooms: {property.items[1].value}
+                            </div>
+                            <div className="col-span-1 flex  items-center gap-4">
+                                <LandPlot size={32} strokeOpacity={2} />
+                                <div className="text-lg font-semibold">
+                                    Totaln Area:
+                                    <div className="text-base font-normal">
+                                        {project.LandArea}
+                                    </div>
                                 </div>
-                                <div className="py-2">
-                                    Square Footage: {property.items[2].value}
-                                </div>
-                                <div className="flex justify-end">
-                                    <Button type="button" className=''>Schedule a viewing</Button>
+                            </div>
+                            <div className="col-span-1 flex  items-center gap-4">
+                                <LandPlot size={32} />
+                                <div className="text-lg font-semibold">
+                                    Constructionn Density:
+                                    <div className="text-base font-normal">
+                                        {project.ConstructionDensity}
+                                    </div>
                                 </div>
                             </div>
                         </Card>
-
                     </div>
-                    <Card>
-                        <BookingForm propertyId={property.property_id} deposit={property.price} />
-                    </Card>
+                    <div>
+                        <BookingForm projectId={projectId} />
+                    </div>
                 </div>
             ) : (
                 <div className="flex justify-center">

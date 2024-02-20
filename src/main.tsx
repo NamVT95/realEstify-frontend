@@ -9,6 +9,7 @@ import './index.css';
 import HomePage from './pages/home/index.tsx';
 import { store } from './store/store.ts';
 import ViewDetailsPage from './pages/viewDetails/index.tsx';
+import NotFound from './pages/notFound/index.tsx';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: "/detail/:id",
     element: <ViewDetailsPage />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   }
 ]);
 

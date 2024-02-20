@@ -1,35 +1,34 @@
 import FullLayout from '@/FullLayout'
 import Hero from './components/hero'
-import PropertiesList from '@/components/PropertiesList'
+import ProjectsList from '@/components/ProjectsList'
 import { useEffect, useState } from 'react'
-import { getProperties } from '@/lib/api/properties'
+import { getProjects } from '@/lib/api/project'
 
 export default function HomePage() {
-  // const properties = useAppSelector(state => state.properties)
 
-  const [properties, setProperties] = useState([])
+  const [projects, setProjects] = useState([])
 
   useEffect(() => {
 
-    const fetchProperties = async () => {
-      const { data, error } = await getProperties()
+    const fetchProjects = async () => {
+      const { data, error } = await getProjects()
       if (error) {
         console.log(error)
         return
       }
 
       if (data != null) {
-        setProperties(data?.data)
+        setProjects(data?.data)
       }
     }
 
-    fetchProperties()
+    fetchProjects()
   }, [])
 
   return (
     <FullLayout>
       <Hero />
-      <PropertiesList properties={properties} />
+      <ProjectsList projects={projects} />
     </FullLayout>
   )
 }

@@ -1,10 +1,10 @@
 import { axiosClient, handleApiError } from "./config/axiosClient";
 
 interface BookingBody {
-  propertyId: number;
+  projectId: number;
+  name: string;
   email: string;
   phone: string;
-  deposit: number;
 }
 
 export const postBookingProperties = async (bookingData: BookingBody) => {

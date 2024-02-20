@@ -20,35 +20,32 @@ import { notification } from 'antd'
 
 
 interface BookingFormProps {
-    propertyId: number;
-    deposit: number;
+    projectId: number;
 }
 
-function BookingForm({ propertyId }: BookingFormProps) {
+function BookingForm({ projectId }: BookingFormProps) {
     const { toast } = useToast()
     const formik = useFormik({
         initialValues: {
+            projectId: projectId,
             name: '',
             email: '',
             phone: '',
-            message: '',
-            deposit: 50000000,
         },
         validationSchema: Yup.object({
             name: Yup.string().min(3, 'Name must be at least 3 characters').required('Name is required'),
             email: Yup.string().email('Invalid email address').required('Email is required'),
             phone: Yup.string().min(10, "Not a valid phone number").matches(/^[0-9]+$/, 'Phone must be a number').required('Phone number is required'),
-            deposit: Yup.number().min(50000000, 'Deposit must be at least 50,000,000 VND').required('Deposit is required'),
-            message: Yup.string().required('Message is required'),
         }),
         onSubmit: async (values) => {
             try {
                 const bookingData = {
-                    propertyId: propertyId,
+                    projectId: projectId,
+                    name: values.name,
                     email: values.email,
                     phone: values.phone,
-                    deposit: values.deposit,
                 };
+                console.log(bookingData);
 
                 const result = await postBookingProperties(bookingData);
                 console.log(result.data.message);
@@ -77,22 +74,12 @@ function BookingForm({ propertyId }: BookingFormProps) {
 
     const isFormValid = Object.keys(formik.errors).length === 0 && Object.keys(formik.touched).length > 0;
 
-    const handleIncrease = () => {
-        formik.setFieldValue('deposit', formik.values.deposit + 5000000);
-    };
-
-    const handleDecrease = () => {
-        // Ensure the deposit doesn't go below the minimum value
-        const newDeposit = Math.max(formik.values.deposit - 5000000, 50000000);
-        formik.setFieldValue('deposit', newDeposit);
-    };
-
     return (
         <form onSubmit={formik.handleSubmit} className="container my-10 space-y-4">
-            <div className="flex justify-center items-center text-2xl font-semibold">
-                Booking
+            <div className="flex items-center text-2xl font-semibold text-red-500">
+                Booking:
             </div>
-            <div>
+            <div className='space-y-2'>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                     Name
                 </label>
@@ -141,46 +128,6 @@ function BookingForm({ propertyId }: BookingFormProps) {
                 />
                 {formik.touched.phone && formik.errors.phone ? (
                     <div className="text-red-500">{formik.errors.phone}</div>
-                ) : null}
-            </div>
-            <div>
-                <label htmlFor="deposit">Deposit</label>
-                <Input
-                    type="number"
-                    id="deposit"
-                    name="deposit"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.deposit}
-                    min={50000000}
-                    step={5000000}
-                />
-                {formik.touched.deposit && formik.errors.deposit ? (
-                    <div className="text-red-500">{formik.errors.deposit}</div>
-                ) : null}
-                <div className='flex gap-4 pt-2'>
-                    <Button onClick={handleDecrease} type='button'>-</Button>
-                    <Button onClick={handleIncrease} type='button'>+</Button>
-                </div>
-
-
-            </div>
-            <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700">
-                    Message
-                </label>
-                <textarea
-                    id="message"
-                    name="message"
-                    rows={4}
-                    value={formik.values.message}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    placeholder="Type your message here"
-                    className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                ></textarea>
-                {formik.touched.message && formik.errors.message ? (
-                    <div className="text-red-500">{formik.errors.message}</div>
                 ) : null}
             </div>
             <div className="flex justify-center">
