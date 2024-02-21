@@ -40,7 +40,7 @@ function BookingForm({ projectId }: BookingFormProps) {
         onSubmit: async (values) => {
             try {
                 const bookingData = {
-                    projectId: projectId,
+                    project_id: projectId,
                     name: values.name,
                     email: values.email,
                     phone: values.phone,

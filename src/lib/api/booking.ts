@@ -1,7 +1,7 @@
 import { axiosClient, handleApiError } from "./config/axiosClient";
 
 interface BookingBody {
-  projectId: number;
+  project_id: number;
   name: string;
   email: string;
   phone: string;
