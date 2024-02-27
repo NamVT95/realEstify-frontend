@@ -58,7 +58,7 @@ export default function ViewDetailsPage() {
                             <div className="col-span-1 flex  items-center gap-4">
                                 <UsersRound size={32} />
                                 <div className="text-lg font-semibold">
-                                    Invester name:
+                                    Investor name:
                                     <div className="text-base font-normal">
                                         {project.Investor.name}
                                     </div>

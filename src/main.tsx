@@ -6,10 +6,15 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import './index.css';
+import BookingManagement from './pages/dashboard/booking/page.tsx';
 import HomePage from './pages/home/index.tsx';
-import { store } from './store/store.ts';
-import ViewDetailsPage from './pages/viewDetails/index.tsx';
 import NotFound from './pages/notFound/index.tsx';
+import ProfilePage from './pages/profile/index.tsx';
+import ViewDetailsPage from './pages/viewDetails/index.tsx';
+import { store } from './store/store.ts';
+import DashboardLayout from './pages/dashboard/layout.tsx';
+import LoginPage from './pages/authentication/login/page.tsx';
+import Register from './pages/authentication/register/page.tsx';
 
 const router = createBrowserRouter([
   {
@@ -17,13 +22,35 @@ const router = createBrowserRouter([
     element: <HomePage />,
   },
   {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
+  },
+  {
     path: "/detail/:id",
     element: <ViewDetailsPage />,
   },
   {
+    path: "/profile",
+    element: <ProfilePage />,
+  },
+  {
+    path: "/dashboard",
+    element: <DashboardLayout />,
+    children: [
+      {
+        path: "booking",
+        element: <BookingManagement />,
+      },
+    ],
+  },
+  {
     path: "*",
     element: <NotFound />,
-  }
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
