@@ -16,7 +16,9 @@ export default function Header() {
         </div>
       </div>
       <div className="">
-        <Button type="button">Login</Button>
+        <Link to={"/login"}>
+          <Button type="button">Login</Button>
+        </Link>
       </div>
       </nav>
     </header>
