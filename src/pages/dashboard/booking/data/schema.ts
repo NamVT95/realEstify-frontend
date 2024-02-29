@@ -4,11 +4,14 @@ import { z } from "zod"
 // IRL, you will have a schema for your data models.
 export const bookingSchema = z.object({
   id: z.number(),
-  bookingDate: z.string(),
-  paymentMethod: z.string().nullish(),
-  status: z.boolean(),
-  user: z.any(),
-  notes: z.string().nullish(),
+  ProjectId: z.string().nullish(),
+  CustomerId: z.string().nullish(),
+  BookingDate: z.string().nullish(),
+  SelectionMethod: z.string().nullish(),
+  IsSelected: z.boolean().nullish(),
+  AgencyId: z.string().nullish(),
+  OpeningForSalesDetailsId: z.string().nullish(),
+  Status: z.string().nullish(),
 })
 
 export type Booking = z.infer<typeof bookingSchema>
