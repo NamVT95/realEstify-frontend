@@ -15,6 +15,7 @@ import { store } from './store/store.ts';
 import DashboardLayout from './pages/dashboard/layout.tsx';
 import LoginPage from './pages/authentication/login/page.tsx';
 import Register from './pages/authentication/register/page.tsx';
+import ProfileForm from './pages/profile/components/ProfileForm.tsx';
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,22 @@ const router = createBrowserRouter([
         path: "booking",
         element: <BookingManagement />,
       },
+      {
+        path: "project",
+        element: <div>Project Management</div>,
+      },
+      {
+        path: "user",
+        element: <div>User Management</div>,
+      },
+      {
+        path: "user",
+        element: <div>User Management</div>,
+      },
+      {
+        path: "setting",
+        element: <ProfileForm />,
+      }
     ],
   },
   {

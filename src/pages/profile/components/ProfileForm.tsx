@@ -1,9 +1,6 @@
-import Footer from "@/components/Footer"
-import Header from "@/components/Header"
-import { useAppSelector } from "@/hooks/useStore"
-import { useEffect, useState } from "react"
-import {Checkbox, Form, Input } from 'antd';
 import { Button } from "@/components/ui/button";
+import { Form, Input } from 'antd';
+import { useEffect, useState } from "react";
 
 const onFinish = (values: FieldType) => {
   console.log('Success:', values);
@@ -27,7 +24,7 @@ type FieldType = {
   phoneNumber?: string;
   address?: string;
 };
-export default function ProfilePage() {
+export default function ProfileForm() {
     const [userData, setUserData] = useState<any>({})
     // const {userId} = useAppSelector(state => state.user)
 
@@ -48,15 +45,8 @@ export default function ProfilePage() {
         fetchUserData()
     }, [])
 
-
   return (
-    <div>
-        <Header />
-        <div className="bg-gray-100">
-            <h1 className="container text-2xl p-4 font-bold">
-                Profile Page
-            </h1>
-            <div className="container mx-auto py-8">
+    <div className="container mx-auto py-8">
                 <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
                     <div className="col-span-4 sm:col-span-3">
                         <div className="bg-white shadow rounded-lg p-6">
@@ -70,7 +60,6 @@ export default function ProfilePage() {
                     <div className="col-span-4 sm:col-span-9">
                         <div className="bg-white shadow rounded-lg p-6">
                             <h2 className="text-xl font-bold mb-4">General Information</h2>
-
                             <div>
                                 <Form
                                     name="basic"
@@ -88,7 +77,6 @@ export default function ProfilePage() {
                                         >
                                         <Input />
                                     </Form.Item>
-
                                     <Form.Item<FieldType>
                                         label="Email"
                                         name="email"
@@ -123,8 +111,5 @@ export default function ProfilePage() {
                     </div>
                 </div>
             </div>
-        </div>
-        <Footer />
-    </div>
   )
 }
