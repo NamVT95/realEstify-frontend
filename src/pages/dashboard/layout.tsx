@@ -6,9 +6,9 @@ export default function DashboardLayout() {
   return (
     <div className='h-screen flex flex-col'>
         <Header />
-        <div className='flex-1'>
+        <div className='flex-1 flex'>
             <Sidebar />
-            <div className='flex-1'>
+            <div className='flex-1 p-4 bg-slate-100'>
                 <Outlet />
             </div>
         </div>
