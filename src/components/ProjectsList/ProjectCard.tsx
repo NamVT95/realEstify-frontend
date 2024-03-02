@@ -1,5 +1,5 @@
 
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
 import { formatPrice } from "@/lib/formatting";
 import { Link } from "react-router-dom";
 import { propertyInterface } from "@/interface/properties.interface";
@@ -13,11 +13,16 @@ interface PropertysCardProps {
 
 export default function ProjectCard({ project }: PropertysCardProps) {
     return (
-        <Link to={`/detail/${project.ProjectId}`}>
-            <div className="w-350px hover:cursor-pointer">
-                <img src={project.Thumbnail} alt={project.Name} />
+        <Card>
+            <Link to={`/detail/${project.ProjectId}`} className="col-span-1 h-[250px]">
+                <div className="hover:cursor-pointer h-full">
+                    <img src={project.Thumbnail} alt={project.Name} className="object-cover h-full w-full" />
+
+                </div>
+            </Link>
+            <CardFooter>
                 <div className="mt-2 w-full text-center text-2xl font-bold">{project.Name}</div>
-            </div>
-        </Link>
+            </CardFooter>
+        </Card>
     )
 }

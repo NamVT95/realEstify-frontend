@@ -5,80 +5,47 @@ import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { toast } from "@/components/ui/use-toast"
+
 import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { login } from "@/lib/api/login"
+import { toast } from "react-toastify"
+import { useNavigate } from "react-router-dom"
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 const formLoginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(3,{
+  userName: z.string(),
+  password: z.string().min(3, {
     message: "Password must be at least 3 characters long",
   }),
 })
 
 export function UserLoginForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
-
+  const navigate = useNavigate()
   // 1. Define your form.
   const form = useForm<z.infer<typeof formLoginSchema>>({
     resolver: zodResolver(formLoginSchema),
     defaultValues: {
-      email: "",
+      userName: "",
       password: "",
     },
   })
- 
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formLoginSchema>) {
     setIsLoading(true)
-
-    // 3. Send the data somewhere
-    // loginUser(values.email, values.password)
-    // .then((response) => {
-    //   let {
-    //     data, error
-    //   } = response;
-    //   if(error != null) throw new Error(error)
-      
-    //   const { loginResponse } = data
-
-    //   setCurrentUser(data.user);
-    //   localStorage.setItem("accessToken", loginResponse.accessToken);
-
-    //   // amdin
-    //   if(loginResponse.user.roleId === 4 ){
-    //     window.location.href = "/dashboard";
-    //   }
-    //   // staff
-    //   else if(loginResponse.user.roleId === 1){
-    //     window.location.href = "/dashboard";
-    //   }
-    //   // zookeeper
-    //   else if(loginResponse.user.roleId === 2){
-    //     window.location.href = "/dashboard";
-    //   }else{
-    //     router.push(callbackUrl);
-    //   }
-    // })
-    // .catch((error) => {
-    //   toast({
-    //     title: "Login Error",
-    //     description: (
-    //       <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //         <code className="text-light">{JSON.stringify(error.message, null, 2)}</code>
-    //       </pre>
-    //     )
-    //   })
-    //   setIsLoading(false);
-    // })
-    // .finally(() => {
-    //   setIsLoading(false);
-    // })
+    const res = await login(values.userName, values.password)
+      .then((res) => {
+        console.log(res)
+        setIsLoading(false)
+        toast.success("Login successful")
+        navigate("/")
+      })
   }
 
   return (
@@ -87,10 +54,10 @@ export function UserLoginForm({ className, ...props }: UserAuthFormProps) {
         <form method="POST" onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           <FormField
             control={form.control}
-            name="email"
+            name="userName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>User name</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>

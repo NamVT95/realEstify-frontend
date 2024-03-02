@@ -16,6 +16,8 @@ import DashboardLayout from './pages/dashboard/layout.tsx';
 import LoginPage from './pages/authentication/login/page.tsx';
 import Register from './pages/authentication/register/page.tsx';
 import ProfileForm from './pages/profile/components/ProfileForm.tsx';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const router = createBrowserRouter([
   {
@@ -73,6 +75,18 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <RouterProvider router={router} />
     </Provider>
   </React.StrictMode>,

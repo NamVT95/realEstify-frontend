@@ -6,6 +6,7 @@ export const axiosClient = axios.create({
   baseURL: BASE_URL,
   headers: {
     "Content-type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
   },
 });
 

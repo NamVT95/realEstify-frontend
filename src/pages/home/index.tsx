@@ -16,9 +16,8 @@ export default function HomePage() {
         console.log(error)
         return
       }
-
       if (data != null) {
-        setProjects(data?.data)
+        setProjects(data?.response.data)
       }
     }
 
@@ -28,7 +27,19 @@ export default function HomePage() {
   return (
     <FullLayout>
       <Hero />
-      <ProjectsList projects={projects} />
+      {projects ? (
+        projects.length === 0 ? (
+          <div className="container mx-auto text-center text-2xl font-semibold">
+            Loading...
+          </div>
+        ) : (
+          <ProjectsList projects={projects} />
+        )
+      ) : (
+        <div className="container mx-auto text-center text-2xl font-semibold">
+          Loading...
+        </div>
+      )}
     </FullLayout>
   )
 }
