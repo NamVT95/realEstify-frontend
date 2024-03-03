@@ -37,7 +37,7 @@ export default function ViewDetailsPage() {
             {project ? (
                 <div className='container my-10 space-y-4'>
                     <div>
-                        <img src={project.Thumbnail} alt={project.Name} />
+                        <img src={project.Thumbnail} alt={project.Name} className="rounded-md" />
                     </div>
                     <div className="my-8 space-y-4">
                         <div className="text-2xl font-semibold text-red-500">Overal:</div>
@@ -164,7 +164,8 @@ export default function ViewDetailsPage() {
 
                         </Card>
                     </div>
-                    <div>
+                    <div className="grid grid-cols-2 gap-3">
+                        <img src={project.Thumbnail} alt={project.Name} className="col-span-1 h-full w-full rounded-md" />
                         <BookingForm projectId={projectId} />
                     </div>
                 </div>

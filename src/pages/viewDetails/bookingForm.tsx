@@ -49,6 +49,7 @@ function BookingForm({ projectId }: BookingFormProps) {
             name: Yup.string().min(3, 'Name must be at least 3 characters').required('Name is required'),
             email: Yup.string().email('Invalid email address').required('Email is required'),
             phone: Yup.string().min(10, "Not a valid phone number").matches(/^[0-9]+$/, 'Phone must be a number').required('Phone number is required'),
+            deposit: Yup.number().min(1000000, 'Deposit must be at least 1,000,000 VND').required('Deposit is required'),
         }),
         onSubmit: async (values) => {
             try {
@@ -63,6 +64,14 @@ function BookingForm({ projectId }: BookingFormProps) {
                     AmountDeposit: 1000000,
                 };
                 console.log(bookingData);
+                const { error, data } = await postBookingProperties(bookingData);
+                console.log(data);
+                if (error) {
+                    toast.error('Booking failed');
+                } else {
+                    toast.success('Booking successfully');
+                    formik.resetForm();
+                }
             } catch (error) {
                 console.error("Error:", error);
             }
@@ -82,11 +91,11 @@ function BookingForm({ projectId }: BookingFormProps) {
     }
 
     return (
-        <form onSubmit={formik.handleSubmit} className="container my-10 space-y-4">
+        <form onSubmit={formik.handleSubmit} className="container my-10 space-y-4 col-span-1">
             <div className="flex items-center text-2xl font-semibold text-red-500">
                 Booking:
             </div>
-            <div  >
+            <div className='space-y-2'>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                     Name
                 </label>
@@ -142,7 +151,7 @@ function BookingForm({ projectId }: BookingFormProps) {
                     <label htmlFor="theme" className="block text-sm font-medium text-gray-700">
                         Theme
                     </label>
-                    <Select>
+                    <Select defaultValue={formik.values.selectionMethod}>
                         <SelectTrigger className="">
                             <SelectValue placeholder="Payment method" />
                         </SelectTrigger>
@@ -168,6 +177,9 @@ function BookingForm({ projectId }: BookingFormProps) {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                     />
+                    {formik.touched.deposit && formik.errors.deposit ? (
+                        <div className="text-red-500">{formik.errors.deposit}</div>
+                    ) : null}
                 </div>
                 <div className='col-span-1 space-y-2'>
                     <label htmlFor="theme" className="block text-sm font-medium text-gray-700">
