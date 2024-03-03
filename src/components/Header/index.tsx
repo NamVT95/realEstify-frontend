@@ -31,7 +31,9 @@ export default function Header() {
                     <div>
                       <img src={Avatar} alt="profile" className="w-10 h-10 rounded-full" />
                     </div>
-                    User
+                    <div>
+                      <p>{currentUser.FullName}</p>
+                    </div>
                   </div>
                 </PopoverTrigger>
                 <PopoverContent>

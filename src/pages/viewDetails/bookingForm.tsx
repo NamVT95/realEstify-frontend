@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,6 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { notification } from 'antd'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppSelector } from '@/hooks/useStore';
@@ -26,7 +25,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { FormLabel } from '@/components/ui/form';
 
 
 interface BookingFormProps {
@@ -36,6 +34,7 @@ interface BookingFormProps {
 function BookingForm({ projectId }: BookingFormProps) {
     const navigate = useNavigate()
     const user = useAppSelector((state) => state.loginUser.user);
+    const reduxToken = useAppSelector((state) => state.loginUser.token);
     const formik = useFormik({
         initialValues: {
             name: user ? user.FullName || '' : '',
@@ -58,10 +57,10 @@ function BookingForm({ projectId }: BookingFormProps) {
                     customerId: user ? user.id || 0 : 0,
                     agencyId: 1,
                     name: values.name,
-                    selectionMethod: 'VNPay',
+                    selectionMethod: formik.values.selectionMethod,
                     email: values.email,
                     phone: values.phone,
-                    AmountDeposit: 1000000,
+                    AmountDeposit: formik.values.deposit,
                 };
                 console.log(bookingData);
                 const { error, data } = await postBookingProperties(bookingData);
@@ -82,7 +81,8 @@ function BookingForm({ projectId }: BookingFormProps) {
 
     const handleBooking = () => {
         const token = localStorage.getItem('token');
-        if (token) {
+
+        if (token && reduxToken) {
             formik.handleSubmit();
         } else {
             toast.error('You need to login to book a property');
