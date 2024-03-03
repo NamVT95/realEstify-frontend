@@ -30,11 +30,11 @@ export const columns: ColumnDef<Booking>[] = [
   //   enableHiding: false,
   // },
   {
-    accessorKey: "id",
+    accessorKey: "BookingId",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Id" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+    cell: ({ row }) => <div className="">{row.getValue("BookingId")}</div>,
     enableSorting: false,
     enableHiding: false,
   },
@@ -43,31 +43,21 @@ export const columns: ColumnDef<Booking>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="ProjectId" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("ProjectId")}</div>,
+    cell: ({ row }) => <div className="">{row.getValue("ProjectId")}</div>,
     enableSorting: false,
     enableHiding: false,
   },
   {
-    accessorKey: "CustomerId",
+    accessorKey: "Customer",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="CustomerId" />
+      <DataTableColumnHeader column={column} title="Customer" />
     ),
     cell: ({ row }) => {
       // const label = labels.find((label) => label.value === row.original.label)
 
       return (
         <div className="flex space-x-2">
-          {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
-          <span className="max-w-[500px] truncate font-medium">
-            <div className="flex gap-2 items-center">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={(row.getValue("CustomerId") as any).avatarUrl} alt={(row.getValue("CustomerId"))} />
-              <AvatarFallback>{(row.getValue("CustomerId") as any).slice(0,2)}</AvatarFallback>
-            </Avatar>
-            {/* {(row.getValue("CustomerId") as Booking["CustomerId"])}  */}
-            UserName
-            </div>
-          </span>
+          <div className="">{(row.getValue("Customer") as any).FullName}</div>
         </div>
       )
     },
@@ -96,7 +86,7 @@ export const columns: ColumnDef<Booking>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="SelectionMethod" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("SelectionMethod")}</div>,
+    cell: ({ row }) => <div className="">{row.getValue("SelectionMethod")}</div>,
     enableSorting: false,
     enableHiding: false,
   },
@@ -107,9 +97,25 @@ export const columns: ColumnDef<Booking>[] = [
     ),
     cell: ({ row }) => {
       return (
-          <Badge>
-            {row.getValue("Status")}
-          </Badge>
+        <Badge>
+          {row.getValue("Status")}
+        </Badge>
+      )
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id))
+    },
+  },
+  {
+    accessorKey: "AmountDeposit",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Deposit" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div>
+          {row.getValue("AmountDeposit")}
+        </div>
       )
     },
     filterFn: (row, id, value) => {

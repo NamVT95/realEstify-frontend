@@ -5,6 +5,6 @@ export const formatPrice = (number: number): string => {
   const formattedNumber = number.toFixed(0);
   const parts = formattedNumber.toString().split(".");
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  const price = `${parts.join(".")} Bilion VND`;
+  const price = `${parts.join(".")} VND`;
   return price;
 };
