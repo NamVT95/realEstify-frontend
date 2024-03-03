@@ -10,6 +10,8 @@ export default function Header() {
     email: "john@gmail.com"
   })
 
+
+
   return (
     <header className="sticky top-0 bg-primary z-50 text-white">
       <nav className="flex items-center py-5 px-10 justify-between">

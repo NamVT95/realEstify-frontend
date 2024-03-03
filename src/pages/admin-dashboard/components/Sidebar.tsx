@@ -14,11 +14,25 @@ const menuItems = [
     link: "/dashboard"
   },
   {
+    title: "Project Management",
+    icon: (
+      <BookImageIcon className="w-8 h-8" />
+    ),
+    link: "/dashboard/project"
+  },
+  {
     title: "Booking Management",
     icon: (
       <Ticket className="w-8 h-8" />
     ),
     link: "/dashboard/booking"
+  },
+  {
+    title: "User Management",
+    icon: (
+      <User2 className="w-8 h-8" />
+    ),
+    link: "/dashboard/user"
   },
   {
     title: "Profile Setting",

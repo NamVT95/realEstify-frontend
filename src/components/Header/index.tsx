@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import Avatar from "@/assets/hero.jpg"
+import { useAppSelector } from "@/hooks/useStore";
 export default function Header() {
   // check current user get from redux or state(call api)
-  const [currentUser, setCurrentUser] = useState()
+  const currentUser = useAppSelector((state) => state.loginUser.user);
+  console.log(currentUser)
 
   return (
     <header className="sticky top-0 bg-white z-50">

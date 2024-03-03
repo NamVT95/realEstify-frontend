@@ -49,16 +49,18 @@ const router = createBrowserRouter([
         element: <BookingManagement />,
       },
       {
-        path: "project",
-        element: <div>Project Management</div>,
-      },
+        path: "setting",
+        element: <ProfileForm />,
+      }
+    ],
+  },
+  {
+    path: "/admin-dashboard",
+    element: <DashboardLayout />,
+    children: [
       {
-        path: "user",
-        element: <div>User Management</div>,
-      },
-      {
-        path: "user",
-        element: <div>User Management</div>,
+        path: "customer",
+        element: <BookingManagement />,
       },
       {
         path: "setting",
