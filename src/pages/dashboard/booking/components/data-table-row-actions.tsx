@@ -2,13 +2,14 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Row, Table, TableMeta } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuTrigger
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { useState } from "react"
+import ViewBookingDialog from "./viewBookingDialog"
 
 
 interface DataTableRowActionsProps<TData> {
@@ -20,7 +21,7 @@ export function DataTableRowActions<TData>({
   row,
   table
 }: DataTableRowActionsProps<TData>) {
-  const meta : TableMeta<TData> | undefined = table.options.meta;
+  const meta: TableMeta<TData> | undefined = table.options.meta;
 
   const [viewOpen, setViewOpen] = useState(false)
   const [updateOpen, setUpdateOpen] = useState(false)
@@ -34,7 +35,7 @@ export function DataTableRowActions<TData>({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon">
-          <DotsHorizontalIcon className="w-5 h-5"/>
+          <DotsHorizontalIcon className="w-5 h-5" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent sideOffset={5} alignOffset={-5}>
@@ -42,12 +43,13 @@ export function DataTableRowActions<TData>({
           <DropdownMenuItem onSelect={() => setViewOpen(true)}>
             View
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => setUpdateOpen(true)}>
+          <DropdownMenuItem onSelect={() => handleUpdate(true)}>
             Update Information
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
       {/* <ViewFormDialog open={viewOpen} setOpen={setViewOpen} row={row} table={table}/> */}
+      <ViewBookingDialog open={updateOpen} setOpen={handleUpdate} row={row.original} />
     </DropdownMenu>
   )
 }

@@ -107,6 +107,7 @@ function BookingForm({ projectId }: BookingFormProps) {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     placeholder="Enter your name"
+                    disabled={user ? true : false}
                 />
                 {formik.touched.name && formik.errors.name ? (
                     <div className="text-red-500">{formik.errors.name}</div>
@@ -124,6 +125,7 @@ function BookingForm({ projectId }: BookingFormProps) {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     placeholder="Enter your email"
+                    disabled={user ? true : false}
                 />
                 {formik.touched.email && formik.errors.email ? (
                     <div className="text-red-500">{formik.errors.email}</div>
@@ -141,6 +143,7 @@ function BookingForm({ projectId }: BookingFormProps) {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     placeholder="Enter your phone number"
+                    disabled={user ? true : false}
                 />
                 {formik.touched.phone && formik.errors.phone ? (
                     <div className="text-red-500">{formik.errors.phone}</div>

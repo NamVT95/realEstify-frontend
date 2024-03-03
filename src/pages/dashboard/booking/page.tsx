@@ -5,9 +5,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useEffect, useState } from 'react'
 import { get } from 'http'
 import { getPeddingBooking } from '@/lib/api/getPeddingBooking'
+import { useAppSelector } from '@/hooks/useStore'
 
 export default function BookingManagement() {
   const [data, setData] = useState([])
+  const { trigger } = useAppSelector((state) => state.trigger)
 
   useEffect(() => {
     const handleGetPeddingBooking = async () => {
@@ -20,7 +22,7 @@ export default function BookingManagement() {
       }
     }
     handleGetPeddingBooking()
-  }, [])
+  }, [trigger])
 
   return (
     <div className='flex flex-col gap-8'>
