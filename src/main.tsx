@@ -22,6 +22,8 @@ import AdminDashboardLayout from './pages/admin-dashboard/layout.tsx';
 import Project from './pages/admin-dashboard/project/page.tsx';
 import CustomerPage from './pages/admin-dashboard/customer/page.tsx';
 import AgencyPage from './pages/admin-dashboard/agency/page.tsx';
+import AgencyRoute from './route/agencyRoute.tsx';
+import InvestorRoute from './route/investorRoute.tsx';
 
 const router = createBrowserRouter([
   {
@@ -64,7 +66,10 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin-dashboard",
-    element: <AdminDashboardLayout />,
+    element:
+      <InvestorRoute>
+        <AdminDashboardLayout />
+      </InvestorRoute>,
     children: [
       {
         path: "project",
