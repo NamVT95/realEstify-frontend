@@ -1,5 +1,5 @@
 import { cx } from "class-variance-authority"
-import { BookImageIcon, CogIcon, HomeIcon, Menu, Ticket, User2, XIcon } from "lucide-react"
+import { BookImageIcon, CogIcon, HomeIcon, Menu, Ticket, User, User2, XIcon } from "lucide-react"
 import { useState } from "react"
 import { CSSTransition } from "react-transition-group"
 import { Link, useLocation } from "react-router-dom"
@@ -11,35 +11,42 @@ const menuItems = [
     icon: (
       <HomeIcon className="w-8 h-8" />
     ),
-    link: "/dashboard"
+    link: "/admin-dashboard"
   },
   {
     title: "Project Management",
     icon: (
       <BookImageIcon className="w-8 h-8" />
     ),
-    link: "/dashboard/project"
+    link: "/admin-dashboard/project"
   },
+  // {
+  //   title: "Booking Management",
+  //   icon: (
+  //     <Ticket className="w-8 h-8" />
+  //   ),
+  //   link: "/admin-dashboard/booking"
+  // },
   {
-    title: "Booking Management",
-    icon: (
-      <Ticket className="w-8 h-8" />
-    ),
-    link: "/dashboard/booking"
-  },
-  {
-    title: "User Management",
+    title: "Agency Management",
     icon: (
       <User2 className="w-8 h-8" />
     ),
-    link: "/dashboard/user"
+    link: "/admin-dashboard/agency"
+  },
+  {
+    title: "Customer Management",
+    icon: (
+      <User2 className="w-8 h-8" />
+    ),
+    link: "/admin-dashboard/customer"
   },
   {
     title: "Profile Setting",
     icon: (
       <CogIcon className="w-8 h-8" />
     ),
-    link: "/dashboard/setting"
+    link: "/admin-dashboard/setting"
   }
 ]
 

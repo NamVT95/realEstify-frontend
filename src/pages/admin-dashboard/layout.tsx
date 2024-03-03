@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom'
 import Header from './components/Header'
 import Sidebar from './components/Sidebar'
 
-export default function DashboardLayout() {
+export default function AdminDashboardLayout() {
   return (
     <div className='h-screen flex flex-col'>
         <Header />
