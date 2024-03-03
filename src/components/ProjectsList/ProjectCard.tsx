@@ -16,7 +16,7 @@ export default function ProjectCard({ project }: PropertysCardProps) {
         <Card>
             <Link to={`/detail/${project.ProjectId}`} className="col-span-1 h-[250px]">
                 <div className="hover:cursor-pointer h-full">
-                    <img src={project.Thumbnail} alt={project.Name} className="object-cover h-full w-full" />
+                    <img src={project.Thumbnail} alt={project.Name} className="object-cover h-full w-full rounded-md" />
 
                 </div>
             </Link>

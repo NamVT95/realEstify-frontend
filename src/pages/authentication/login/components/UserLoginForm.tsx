@@ -45,11 +45,16 @@ export function UserLoginForm({ className, ...props }: UserAuthFormProps) {
     setIsLoading(true)
     const res = await login(values.userName, values.password)
       .then((res) => {
-        console.log(res)
         setIsLoading(false)
         toast.success("Login successful")
         dispatch(loginSlice(res))
-        navigate("/")
+        if (res?.user?.Role === "agency") {
+          navigate("/dashboard")
+        } else if (res?.user?.Role === "investor" || res?.user?.Role === "admin") {
+          navigate("/admin-dashboard")
+        } else {
+          navigate("/")
+        }
       })
   }
 

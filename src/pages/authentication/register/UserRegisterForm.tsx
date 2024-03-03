@@ -4,12 +4,12 @@ import * as z from "zod"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
@@ -17,357 +17,192 @@ import { CalendarIcon, ChevronDownIcon, Loader2Icon } from "lucide-react"
 import { ChangeEvent, useState } from "react"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { format } from "date-fns"
+import { register } from "@/lib/api/register"
+import { toast } from "react-toastify"
+import { useNavigate } from "react-router-dom"
+
+const phoneRegex = new RegExp(
+  /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
+);
 
 const formSignUpSchema = z.object({
-    // fullname: z.string()
-    // .min(3, {message: 'Name must be at least 3 characters.'})
-    // .max(30, {message: 'Name must be max 30 characters'}),
-    username: z.string()
-    .min(3, {message: 'Username must be at least 3 characters.'})
-    .max(30, {message: 'Username must be max 30 characters'}),
-    email: z.string().email({message: 'Please enter a valid email address.'}),
-    gender: z.string().nonempty(),
-    dateOfBirth: z.date({
-      required_error: "A date of birth is required.",
-    }),
-    avatarUrl: z.string(),
-    // phoneNumber: z.string(),
-    newPassword: z.string({
-      required_error: "New Password is required",
-    })
-    .min(3, {message: 'New Password must be at least 6 characters.'})
-    .max(30, {message: 'New Password must be max 30 characters'}),
-    confirmNewPassword: z.string({}),
-    })
-    .refine((data) => data.newPassword === data.confirmNewPassword,{
-      message: "Oops! Password does not match",
-      path: ["confirmNewPassword"],
-    })
+  fullname: z.string()
+    .min(3, { message: 'Name must be at least 3 characters.' })
+    .max(30, { message: 'Name must be max 30 characters' }),
+  username: z.string()
+    .min(3, { message: 'Username must be at least 3 characters.' })
+    .max(30, { message: 'Username must be max 30 characters' }),
+  email: z.string().email({ message: 'Please enter a valid email address.' }),
+  phoneNumber: z.string().regex(phoneRegex, {
+    message: "Please enter a valid phone number",
+  }),
+  address: z.string(),
+  newPassword: z.string({
+    required_error: "New Password is required",
+  })
+    .min(3, { message: 'New Password must be at least 6 characters.' })
+    .max(30, { message: 'New Password must be max 30 characters' }),
+  confirmNewPassword: z.string({}),
+})
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
+    message: "Oops! Password does not match",
+    path: ["confirmNewPassword"],
+  })
 
 export type SignUpFormValues = z.infer<typeof formSignUpSchema>
 
 export default function UserRegisterForm() {
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-  
-    const defaultValues: Partial<SignUpFormValues> = {
-      username: "",
-      email: "",
-      gender: "Male",
-      dateOfBirth: new Date(),
-      avatarUrl: "",
-      newPassword: "",
-      confirmNewPassword: "",
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const navigate = useNavigate()
+
+  const defaultValues: Partial<SignUpFormValues> = {
+    username: "",
+    email: "",
+    fullname: "",
+    phoneNumber: "",
+    address: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  }
+
+  const form = useForm<SignUpFormValues>({
+    resolver: zodResolver(formSignUpSchema),
+    defaultValues,
+    mode: "onChange",
+  })
+
+  async function onSubmit(values: SignUpFormValues) {
+    setIsLoading(true)
+    const handleRegister = async () => {
+      const data = await register({
+        username: values.username,
+        password: values.newPassword,
+        fullname: values.fullname,
+        phone: values.phoneNumber,
+        address: values.address,
+        email: values.email,
+      })
+      if (data) {
+        toast.success("Account created successfully")
+        setIsLoading(false)
+        navigate("/login")
+      } else {
+        toast.error("Failed to create account")
+        setIsLoading(false)
+      }
     }
-  
-    const form = useForm<SignUpFormValues>({
-      resolver: zodResolver(formSignUpSchema),
-      defaultValues,
-      mode: "onChange",
-    })
-  
-    console.log("er", form.formState.errors)
-  
-  
-    // const handleImage = (e: ChangeEvent<HTMLInputElement>, fieldChange: (value: string) => void) => {
-    //   e.preventDefault();
-  
-    //   const fileReader = new FileReader();
-  
-    //   if(e.target.files && e.target.files.length > 0) {
-    //     const file = e.target.files[0];
-        
-    //     setFiles(Array.from(e.target.files));
-  
-    //     if(!file.type.includes("image")) return;
-  
-    //     fileReader.onload = async (event) => {
-    //       const imageDataUrl = event.target?.result?.toString() || '';
-    //       fieldChange(imageDataUrl);
-    //     }
-  
-    //     fileReader.readAsDataURL(file);
-    //   }
-    // }
-  
-    async function onSubmit(values: SignUpFormValues) {
-      setIsLoading(true);
-  
-    //   if(values.avatarUrl){
-    //     const blob = values.avatarUrl;
-  
-    //   const hasImageChanged = isBase64Image(blob);
-  
-    //   if(hasImageChanged) {
-    //     // const imgRes = await startUpload(files);
-    //     const imageRef = ref(FirebaseService.storage, `images/${values.email}+${values.dateOfBirth.toISOString()}`);
-    //     uploadBytes(imageRef, files[0]).then(() => {
-    //       getDownloadURL(imageRef)
-    //         .then((url) => {
-    //           values.avatarUrl = url;
-    //           registerUser({
-    //             userInfo: {
-    //               username: values.username,
-    //               avatarUrl: values.avatarUrl || "",
-    //               newPassword: values.newPassword,
-    //               confirmNewPassword: values.confirmNewPassword,
-    //               dateOfBirth: values.dateOfBirth.toISOString(),
-    //               email: values.email,
-    //               gender: values.gender
-    //             }
-    //           })
-    //           .then((response) => {
-    //             setIsLoading(false);
-    //             let {data, error} = response;
-  
-    //             if(error !== null){
-    //               toast({
-    //                 title: "Sign Up Error",
-    //                 description: (
-    //                   <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //                     <code className="text-light">{JSON.stringify(error, null, 2)}</code>
-    //                   </pre>
-    //                 )
-    //               })
-    //               setIsLoading(false);
-    //             } else {
-    //               setCurrentUser(data.user);
-    //               localStorage.setItem("accessToken", data.accessToken);
-    //               // if(user.role === "Admin"){
-    //               //   window.location.href = "/admin";
-    //               // }else if(user.role === "Staff"){
-    //               //   window.location.href = "/user";
-    //               // }else{
-    //               //   window.location.href = "/";
-    //               // }
-    //               router.push(callbackUrl);
-    //             }
-    //           })
-    //         })
-    //         .catch((error) => {
-    //           toast({
-    //             title: "Login Error",
-    //             description: (
-    //               <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //                 <code className="text-light">{JSON.stringify(error, null, 2)}</code>
-    //               </pre>
-    //             )
-    //           })
-    //           setIsLoading(false);
-    //           values.avatarUrl = "";
-    //         });
-    //     });
-    //   }
-    //   } else {
-    //     registerUser({
-    //       userInfo: {
-    //         username: values.username,
-    //         avatarUrl: values.avatarUrl || "",
-    //         newPassword: values.newPassword,
-    //         confirmNewPassword: values.confirmNewPassword,
-    //         dateOfBirth: values.dateOfBirth.toISOString(),
-    //         email: values.email,
-    //         gender: values.gender
-    //       }
-    //     })
-    //     .then((response) => {
-    //       setIsLoading(false);
-    //       let {data, error} = response;
-  
-    //       if(error !== null){
-    //         toast({
-    //           title: "Sign Up Error",
-    //           description: (
-    //             <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //               <code className="text-light">{JSON.stringify(error, null, 2)}</code>
-    //             </pre>
-    //           )
-    //         })
-    //         setIsLoading(false);
-    //       } else {
-    //         setCurrentUser(data.user);
-    //         localStorage.setItem("accessToken", data.accessToken);
-    //         // if(user.role === "Admin"){
-    //         //   window.location.href = "/admin";
-    //         // }else if(user.role === "Staff"){
-    //         //   window.location.href = "/user";
-    //         // }else{
-    //         //   window.location.href = "/";
-    //         // }
-    //         router.push(callbackUrl);
-    //       }
-    //     })
-    //   }
-    }
-  
-    return (
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          {/* <FormField
+    handleRegister()
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 justify-items-stretch">
+          <FormField
             control={form.control}
-            name="avatarUrl"
+            name="username"
             render={({ field }) => (
-              <FormItem className="flex items-center gap-3">
-                <FormLabel className="account-form_image-label">
-                  {field.value ? (
-                      <Image
-                        src={
-                            field.value
-                        }
-                        alt="profile photo"
-                        width={100}
-                        height={100}
-                        priority
-                        className="rounded-full object-cover h-full w-full"
-                      />
-                    ) : (
-                      <Image
-                        src= "/Zooma_Logo.svg"
-                        alt="profile photo"
-                        width={100}
-                        height={100}
-                        priority
-                        className="object-contain"
-                      />
-                    )}
-                </FormLabel> 
-                <FormControl className="flex-1 text-base-semibold text-gray-500">
-                  <Input 
-                    type="file"
-                    accept="image/*"
-                    placeholder="Upload a photo" 
-                    className="account-form_image-input"
-                    onChange={e => handleImage(e, field.onChange)}
-                  />
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your Username" {...field} />
                 </FormControl>
                 <FormMessage />
-              </FormItem> 
+              </FormItem>
             )}
-          /> */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 justify-items-stretch">
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Your Username" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Your email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 justify-items-stretch">
-            <FormField
-              control={form.control}
-              name="newPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input type="password" placeholder="Your Password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="confirmNewPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
-                  <FormControl>
-                    <Input type="password" placeholder="Confirm Password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 justify-items-stretch">
-            <FormField
-              control={form.control}
-              name="gender"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Gender</FormLabel>
-                  <div className="relative w-full">
-                    <FormControl>
-                      <select
-                        className={cn(
-                          buttonVariants({ variant: "outline" }),
-                          "w-full appearance-none bg-transparent font-normal"
-                        )}
-                        {...field}
-                      >
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                      </select>
-                    </FormControl>
-                    <ChevronDownIcon className="absolute right-3 top-2.5 h-4 w-4 opacity-50" />
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="dateOfBirth"
-              render={({ field }) => (
-                <FormItem className="flex flex-col mt-2 justify-start  gap-0">
-                  <FormLabel>Date of birth</FormLabel>
-                  <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          className={cn("w-[240px] justify-start text-left font-normal", !field.value && "text-muted-foreground")}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent align="start" className=" w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          captionLayout="dropdown-buttons"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={(date:any) =>
-                            date > new Date() || date < new Date("1900-01-01")
-                          }
-                          fromYear={1960}
-                          toYear={2030}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <Button disabled={isLoading} type="submit" className="w-full hover:shadow-primary-md">
-            {isLoading && (
-              <Loader2Icon className="animate-spin" />
+          />
+          <FormField
+            control={form.control}
+            name="fullname"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Full Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your Full Name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
-            Sign Up
-          </Button>             
-        </form>
-      </Form>
+          />
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 justify-items-stretch">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your Email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phoneNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone Number</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your Phone Number" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div>
+          <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Address</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your Address" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 justify-items-stretch">
+          <FormField
+            control={form.control}
+            name="newPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input type="password" placeholder="Your Password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="confirmNewPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm Password</FormLabel>
+                <FormControl>
+                  <Input type="password" placeholder="Confirm Password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <Button disabled={isLoading} type="submit" className="w-full hover:shadow-primary-md">
+          {isLoading && (
+            <Loader2Icon className="animate-spin" />
+          )}
+          Sign Up
+        </Button>
+      </form>
+    </Form>
   )
 }
