@@ -18,6 +18,10 @@ import Register from './pages/authentication/register/page.tsx';
 import ProfileForm from './pages/profile/components/ProfileForm.tsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AdminDashboardLayout from './pages/admin-dashboard/layout.tsx';
+import Project from './pages/admin-dashboard/project/page.tsx';
+import CustomerPage from './pages/admin-dashboard/customer/page.tsx';
+import AgencyPage from './pages/admin-dashboard/agency/page.tsx';
 
 const router = createBrowserRouter([
   {
@@ -56,11 +60,23 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin-dashboard",
-    element: <DashboardLayout />,
+    element: <AdminDashboardLayout />,
     children: [
       {
+        path: "project",
+        element: <Project />,
+      },
+      {
         path: "customer",
+        element: <CustomerPage />,
+      },
+      {
+        path: "booking",
         element: <BookingManagement />,
+      },
+      {
+        path: "agency",
+        element: <AgencyPage />,
       },
       {
         path: "setting",
