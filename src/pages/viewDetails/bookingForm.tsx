@@ -15,8 +15,18 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { useToast } from "@/components/ui/use-toast"
 import { notification } from 'antd'
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useAppSelector } from '@/hooks/useStore';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import { FormLabel } from '@/components/ui/form';
 
 
 interface BookingFormProps {
@@ -24,13 +34,16 @@ interface BookingFormProps {
 }
 
 function BookingForm({ projectId }: BookingFormProps) {
-    const { toast } = useToast()
+    const navigate = useNavigate()
+    const user = useAppSelector((state) => state.loginUser.user);
     const formik = useFormik({
         initialValues: {
-            projectId: projectId,
-            name: '',
-            email: '',
-            phone: '',
+            name: user ? user.FullName || '' : '',
+            email: user ? user.Email || '' : '',
+            phone: user ? user.PhoneNumber || '' : '',
+            selectionMethod: 'VNPay',
+            deposit: 1000000,
+            agency: 1,
         },
         validationSchema: Yup.object({
             name: Yup.string().min(3, 'Name must be at least 3 characters').required('Name is required'),
@@ -40,32 +53,16 @@ function BookingForm({ projectId }: BookingFormProps) {
         onSubmit: async (values) => {
             try {
                 const bookingData = {
-                    project_id: projectId,
+                    projectId: projectId,
+                    customerId: user ? user.id || 0 : 0,
+                    agencyId: 1,
                     name: values.name,
+                    selectionMethod: 'VNPay',
                     email: values.email,
                     phone: values.phone,
+                    AmountDeposit: 1000000,
                 };
                 console.log(bookingData);
-
-                const result = await postBookingProperties(bookingData);
-                console.log(result.data.message);
-                notification.success({
-                    message: 'Booking successful',
-                    description: result.data.message,
-                    placement: 'topRight',
-                    duration: 2,
-                })
-                if (result.error) {
-                    console.error("Error:", result.error);
-                    notification.error({
-                        message: 'Booking failed',
-                        description: result.error,
-                        placement: 'topRight',
-                        duration: 2,
-                    })
-                } else {
-                    console.log("Booking successful:", result.data);
-                }
             } catch (error) {
                 console.error("Error:", error);
             }
@@ -74,12 +71,22 @@ function BookingForm({ projectId }: BookingFormProps) {
 
     const isFormValid = Object.keys(formik.errors).length === 0 && Object.keys(formik.touched).length > 0;
 
+    const handleBooking = () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            formik.handleSubmit();
+        } else {
+            toast.error('You need to login to book a property');
+            navigate('/login');
+        }
+    }
+
     return (
         <form onSubmit={formik.handleSubmit} className="container my-10 space-y-4">
             <div className="flex items-center text-2xl font-semibold text-red-500">
                 Booking:
             </div>
-            <div className='space-y-2'>
+            <div  >
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                     Name
                 </label>
@@ -96,7 +103,7 @@ function BookingForm({ projectId }: BookingFormProps) {
                     <div className="text-red-500">{formik.errors.name}</div>
                 ) : null}
             </div>
-            <div>
+            <div className='space-y-2'>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                     Email
                 </label>
@@ -113,7 +120,7 @@ function BookingForm({ projectId }: BookingFormProps) {
                     <div className="text-red-500">{formik.errors.email}</div>
                 ) : null}
             </div>
-            <div>
+            <div className='space-y-2'>
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                     Phone
                 </label>
@@ -129,6 +136,56 @@ function BookingForm({ projectId }: BookingFormProps) {
                 {formik.touched.phone && formik.errors.phone ? (
                     <div className="text-red-500">{formik.errors.phone}</div>
                 ) : null}
+            </div>
+            <div className='w-full grid grid-cols-3 gap-3'>
+                <div className='col-span-1 space-y-2'>
+                    <label htmlFor="theme" className="block text-sm font-medium text-gray-700">
+                        Theme
+                    </label>
+                    <Select>
+                        <SelectTrigger className="">
+                            <SelectValue placeholder="Payment method" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="VNPay">VNPay</SelectItem>
+                            <SelectItem value="Momo">Momo</SelectItem>
+                            <SelectItem value="ZaloPay">ZaloPay</SelectItem>
+                            <SelectItem value="Bank">Bank</SelectItem>
+                            <SelectItem value="Cash">Cash</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="col-span-1 space-y-2">
+                    <label htmlFor="deposit" className="block text-sm font-medium text-gray-700">
+                        Deposit
+                    </label>
+                    <Input
+                        id="deposit"
+                        name="deposit"
+                        type="number"
+                        placeholder="Enter your phone number"
+                        value={formik.values.deposit}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                </div>
+                <div className='col-span-1 space-y-2'>
+                    <label htmlFor="theme" className="block text-sm font-medium text-gray-700">
+                        Agency
+                    </label>
+                    <Select>
+                        <SelectTrigger className="">
+                            <SelectValue placeholder="Agency" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="1">Agency 1</SelectItem>
+                            <SelectItem value="2">Agency 2</SelectItem>
+                            <SelectItem value="3">Agency 3</SelectItem>
+                            <SelectItem value="4">Agency 4</SelectItem>
+                            <SelectItem value="5">Agency 5</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
             </div>
             <div className="flex justify-center">
                 <AlertDialog>
@@ -147,7 +204,7 @@ function BookingForm({ projectId }: BookingFormProps) {
                         <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
                             <AlertDialogAction type='submit' onClick={() => {
-                                formik.handleSubmit();
+                                handleBooking();
                             }}>Okay</AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>

@@ -14,6 +14,8 @@ import { z } from "zod"
 import { login } from "@/lib/api/login"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
+import { useAppDispatch } from "@/hooks/useStore"
+import { loginSlice } from "@/store/auth/loginUserSlice"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
@@ -27,6 +29,8 @@ const formLoginSchema = z.object({
 export function UserLoginForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formLoginSchema>>({
     resolver: zodResolver(formLoginSchema),
@@ -44,6 +48,7 @@ export function UserLoginForm({ className, ...props }: UserAuthFormProps) {
         console.log(res)
         setIsLoading(false)
         toast.success("Login successful")
+        dispatch(loginSlice(res))
         navigate("/")
       })
   }

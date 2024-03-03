@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import { axiosClient, handleApiError } from "./config/axiosClient";
+import { jwtDecode } from "jwt-decode";
 
 export const login = async (username: string, password: string) => {
   try {
@@ -8,8 +9,10 @@ export const login = async (username: string, password: string) => {
       password,
     });
     console.log(data);
-    localStorage.setItem("token", data.response.token);
-    return { error: null, data };
+    const decode = jwtDecode(data.token);
+    console.log(JSON.stringify(decode));
+    localStorage.setItem("token", data.token);
+    return { error: null, data, user: decode };
   } catch (error) {
     console.log(error);
     toast.error("An error occurred while logging in");
