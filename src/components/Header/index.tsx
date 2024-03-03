@@ -3,11 +3,12 @@ import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import Avatar from "@/assets/hero.jpg"
-import { useAppSelector } from "@/hooks/useStore";
+import { useAppDispatch, useAppSelector } from "@/hooks/useStore";
+import { User, logout } from "@/store/auth/loginUserSlice";
 export default function Header() {
   // check current user get from redux or state(call api)
-  const currentUser = useAppSelector((state) => state.loginUser.user);
-  console.log(currentUser)
+  const { user } = useAppSelector((state) => state.loginUser);
+  const dispatch = useAppDispatch();
 
   return (
     <header className="sticky top-0 bg-white z-50">
@@ -24,7 +25,7 @@ export default function Header() {
         </div>
         <div className="">
           {
-            currentUser ? (
+            user ? (
               <Popover>
                 <PopoverTrigger>
                   <div className="flex gap-2 items-center">
@@ -32,7 +33,7 @@ export default function Header() {
                       <img src={Avatar} alt="profile" className="w-10 h-10 rounded-full" />
                     </div>
                     <div>
-                      <p>{currentUser.FullName}</p>
+                      <p>{user.FullName}</p>
                     </div>
                   </div>
                 </PopoverTrigger>
@@ -40,7 +41,9 @@ export default function Header() {
                   <div className="flex flex-col gap-2">
                     <Link to={"/profile"}>Profile</Link>
                     <Link to={"/settings"}>Settings</Link>
-                    <Link to={"/logout"}>Logout</Link>
+                    <Button type="button" onClick={() => {
+                      dispatch(logout());
+                    }}>Logout</Button>
                   </div>
                 </PopoverContent>
               </Popover>

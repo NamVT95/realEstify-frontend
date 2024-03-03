@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAppSelector } from '@/hooks/useStore';
+import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
 import {
     Select,
     SelectContent,
@@ -33,7 +33,7 @@ interface BookingFormProps {
 
 function BookingForm({ projectId }: BookingFormProps) {
     const navigate = useNavigate()
-    const user = useAppSelector((state) => state.loginUser.user);
+    const { user, token } = useAppSelector((state) => state.loginUser);
     const reduxToken = useAppSelector((state) => state.loginUser.token);
     const formik = useFormik({
         initialValues: {
@@ -85,7 +85,7 @@ function BookingForm({ projectId }: BookingFormProps) {
         if (token && reduxToken) {
             formik.handleSubmit();
         } else {
-            toast.error('You need to login to book a property');
+            toast.error('You need to login first');
             navigate('/login');
         }
     }
@@ -204,8 +204,8 @@ function BookingForm({ projectId }: BookingFormProps) {
             </div>
             <div className="flex justify-center">
                 <AlertDialog>
-                    <AlertDialogTrigger className={`w-full ${!isFormValid ? 'cursor-not-allowed' : ''}`} disabled={!isFormValid}>
-                        <Button className='w-full' disabled={!isFormValid} type='button'>
+                    <AlertDialogTrigger className={`w-full`} >
+                        <Button className='w-full' type='button'>
                             Send
                         </Button>
                     </AlertDialogTrigger>

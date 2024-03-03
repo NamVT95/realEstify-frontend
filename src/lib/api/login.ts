@@ -12,6 +12,7 @@ export const login = async (username: string, password: string) => {
     const decode = jwtDecode(data.token);
     console.log(JSON.stringify(decode));
     localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(decode));
     return { error: null, data, user: decode };
   } catch (error) {
     console.log(error);

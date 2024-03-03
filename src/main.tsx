@@ -1,23 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { Provider } from 'react-redux';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import './index.css';
-import BookingManagement from './pages/dashboard/booking/page.tsx';
-import HomePage from './pages/home/index.tsx';
-import NotFound from './pages/notFound/index.tsx';
-import ProfilePage from './pages/profile/index.tsx';
-import ViewDetailsPage from './pages/viewDetails/index.tsx';
-import { store } from './store/store.ts';
-import DashboardLayout from './pages/dashboard/layout.tsx';
-import LoginPage from './pages/authentication/login/page.tsx';
-import Register from './pages/authentication/register/page.tsx';
-import ProfileForm from './pages/profile/components/ProfileForm.tsx';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import "./index.css";
+import BookingManagement from "./pages/dashboard/booking/page.tsx";
+import HomePage from "./pages/home/index.tsx";
+import NotFound from "./pages/notFound/index.tsx";
+import ProfilePage from "./pages/profile/index.tsx";
+import ViewDetailsPage from "./pages/viewDetails/index.tsx";
+import { store } from "./store/store.ts";
+import DashboardLayout from "./pages/dashboard/layout.tsx";
+import LoginPage from "./pages/authentication/login/page.tsx";
+import Register from "./pages/authentication/register/page.tsx";
+import ProfileForm from "./pages/profile/components/ProfileForm.tsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import AgencyRoute from "./route/agencyRoute.tsx";
+import InvestorRoute from "./route/investorRoute.tsx";
 
 const router = createBrowserRouter([
   {
@@ -42,7 +41,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout />,
+    element: (
+      <AgencyRoute>
+        <DashboardLayout />
+      </AgencyRoute>
+    ),
     children: [
       {
         path: "booking",
@@ -51,12 +54,15 @@ const router = createBrowserRouter([
       {
         path: "setting",
         element: <ProfileForm />,
-      }
+      },
     ],
   },
   {
     path: "/admin-dashboard",
-    element: <DashboardLayout />,
+    element:
+      <InvestorRoute>
+        <DashboardLayout />
+      </InvestorRoute>,
     children: [
       {
         path: "customer",
@@ -65,7 +71,7 @@ const router = createBrowserRouter([
       {
         path: "setting",
         element: <ProfileForm />,
-      }
+      },
     ],
   },
   {
@@ -74,7 +80,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
       <ToastContainer
@@ -91,5 +97,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       />
       <RouterProvider router={router} />
     </Provider>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);
