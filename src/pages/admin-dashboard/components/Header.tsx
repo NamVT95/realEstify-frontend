@@ -2,6 +2,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Avatar from "@/assets/hero.jpg"
+import { Button } from '@/components/ui/button'
+import { logout } from '@/store/auth/loginUserSlice'
+import { useDispatch } from 'react-redux'
 
 export default function Header() {
   const [currentUser, setCurrentUser] = useState({
@@ -9,6 +12,8 @@ export default function Header() {
     name: "John Doe",
     email: "john@gmail.com"
   })
+
+  const dispatch = useDispatch();
 
   return (
     <header className="sticky top-0 bg-primary z-50 text-white">
@@ -31,7 +36,9 @@ export default function Header() {
                 <PopoverContent>
                   <div className="flex flex-col gap-2">
                     <Link to={"/dashboard/setting"}>Profile</Link>
-                    <Link to={"/logout"}>Logout</Link>
+                    <Button type="button" onClick={() => {
+                      dispatch(logout());
+                    }}>Logout</Button>
                   </div>
                 </PopoverContent>
               </Popover>
