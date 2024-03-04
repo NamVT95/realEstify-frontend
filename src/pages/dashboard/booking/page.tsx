@@ -6,9 +6,11 @@ import { useEffect, useState } from 'react'
 import { get } from 'http'
 import { getPeddingBooking } from '@/lib/api/getPeddingBooking'
 import { useAppSelector } from '@/hooks/useStore'
+import { getApproveBooking } from '@/lib/api/getApproveBooking'
 
 export default function BookingManagement() {
   const [data, setData] = useState([])
+  const [approvedData, setApprovedData] = useState([])
   const { trigger } = useAppSelector((state) => state.trigger)
 
   useEffect(() => {
@@ -21,7 +23,17 @@ export default function BookingManagement() {
         console.log(error)
       }
     }
+    const handleGetApprovedBooking = async () => {
+      try {
+        const res = await getApproveBooking()
+        console.log(res)
+        setApprovedData(res)
+      } catch (error) {
+        console.log(error)
+      }
+    }
     handleGetPeddingBooking()
+    handleGetApprovedBooking()
   }, [trigger])
 
   return (
@@ -38,9 +50,9 @@ export default function BookingManagement() {
           <TabsContent value="cho-xac-nhan">
             <DataTable data={data} columns={columns} />
           </TabsContent>
-          {/* <TabsContent value="da-xac-nhan">
-            <DataTable data={MOCK_BOOKING_DATA} columns={columns} />
-          </TabsContent> */}
+          <TabsContent value="da-xac-nhan">
+            <DataTable data={approvedData} columns={columns} />
+          </TabsContent>
         </Tabs>
       </div>
     </div>

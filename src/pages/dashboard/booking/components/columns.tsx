@@ -96,8 +96,9 @@ export const columns: ColumnDef<Booking>[] = [
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
+      const status: string = row.getValue("Status")
       return (
-        <Badge>
+        <Badge className={`${status.toLowerCase() === "approved" ? "bg-green-200 text-green-500 hover:bg-green-200" : "bg-slate-200 text-slate-500 hover:bg-slate-200"}`}>
           {row.getValue("Status")}
         </Badge>
       )
