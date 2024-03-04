@@ -20,7 +20,7 @@ export default function ProjectCard({ project }: PropertysCardProps) {
                     <img src={project.Thumbnail} alt={project.Name} className="object-cover h-full w-full rounded-md" />
                     {
                        ( project?.StartDate && ((project?.StartDate) < new Date())) ? 
-                       <div className="py-2 px-4 rounded-tr-md rounded-bl-md bg-green-200 text-green-500 absolute top-0 right-0 font-bold">Chưa mở bán</div>
+                       <div className="py-2 px-4 rounded-tr-md rounded-bl-md bg-green-200 text-green-500 absolute top-0 right-0 font-bold">Đang mở bán</div>
                         : 
                         <div className="py-2 px-4 rounded-tr-md rounded-bl-md bg-red-200 text-red-500 absolute top-0 right-0 font-bold">Chưa mở bán</div>
 }
