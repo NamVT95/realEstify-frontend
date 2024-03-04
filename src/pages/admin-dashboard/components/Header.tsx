@@ -1,6 +1,6 @@
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Avatar from "@/assets/hero.jpg"
 import { Button } from '@/components/ui/button'
 import { logout } from '@/store/auth/loginUserSlice'
@@ -14,6 +14,7 @@ export default function Header() {
   })
 
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   return (
     <header className="sticky top-0 bg-primary z-50 text-white">
@@ -38,6 +39,9 @@ export default function Header() {
                     <Link to={"/dashboard/setting"}>Profile</Link>
                     <Button type="button" onClick={() => {
                       dispatch(logout());
+                      setTimeout(() => {
+                        navigate("/login")
+                      }, 1000);
                     }}>Logout</Button>
                   </div>
                 </PopoverContent>

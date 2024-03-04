@@ -6,6 +6,7 @@ import { format } from "date-fns"
 import { Booking } from "../data/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { Badge } from "@/components/ui/badge"
+import { formatPrice } from "@/lib/formatting"
 
 export const columns: ColumnDef<Booking>[] = [
   // {
@@ -115,7 +116,7 @@ export const columns: ColumnDef<Booking>[] = [
     cell: ({ row }) => {
       return (
         <div>
-          {row.getValue("AmountDeposit")}
+          {formatPrice(row.getValue("AmountDeposit"))}
         </div>
       )
     },
