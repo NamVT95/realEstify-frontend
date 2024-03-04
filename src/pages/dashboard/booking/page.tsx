@@ -27,7 +27,7 @@ export default function BookingManagement() {
       try {
         const res = await getApproveBooking()
         console.log(res)
-        setApprovedData(res)
+        setApprovedData(res || [])
       } catch (error) {
         console.log(error)
       }
