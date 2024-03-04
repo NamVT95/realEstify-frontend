@@ -69,7 +69,8 @@ const router = createBrowserRouter([
     element:
       <InvestorRoute>
         <AdminDashboardLayout />
-      </InvestorRoute>,
+      </InvestorRoute>
+      ,
     children: [
       {
         path: "project",

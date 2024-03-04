@@ -12,7 +12,7 @@ export default function InvestorRoute({ children }: AgencyRouteProps) {
         toast.error("You are not authorized to access this page");
         return <Navigate to="/login" />;
     } else {
-        if (localUser.Role !== "agency") {
+        if (localUser.Role !== "admin") {
             toast.error("You are not authorized to access this page");
             return <Navigate to="/login" />;
         }
