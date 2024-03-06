@@ -191,10 +191,10 @@ export function DataTable({data}:any) {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter name..."
-          value={(table.getColumn("Name")?.getFilterValue() as string) ?? ""}
+          placeholder="Filter FullName..."
+          value={(table.getColumn("FullName")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("Name")?.setFilterValue(event.target.value)
+            table.getColumn("FullName")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
