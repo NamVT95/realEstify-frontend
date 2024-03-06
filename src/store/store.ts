@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import loginUserReducer from "./auth/loginUserSlice";
 import renderTriggerReducer from "./renderTrigger";
+import updateProjectReducer from "./project/updateProjectSlice";
 
 export const store = configureStore({
   reducer: {
     loginUser: loginUserReducer,
     trigger: renderTriggerReducer,
+    updateProject: updateProjectReducer,
   },
 });
 
