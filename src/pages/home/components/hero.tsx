@@ -2,7 +2,17 @@ import heroImage from "@/assets/hero.jpg"
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
-export default function Hero() {
+export default function Hero(
+  {
+    value,
+    handleChange,
+    handleSearch
+  }: {
+    value: string
+    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+    handleSearch: () => void
+  }
+) {
   return (
     <div className='relative'>
          <div>
@@ -19,8 +29,8 @@ export default function Hero() {
           </div>
 
           <div className="flex w-full items-center">
-            <Input type="text" placeholder="Property" className='rounded-r-none'/>
-            <Button type="button" className='rounded-l-none'>Search</Button>
+            <Input type="text" placeholder="Property" className='rounded-r-none' value={value} onChange={handleChange}/>
+            <Button type="button" className='rounded-l-none' onClick={handleSearch}>Search</Button>
           </div>
 
         </div>

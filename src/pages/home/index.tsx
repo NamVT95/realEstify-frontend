@@ -7,30 +7,40 @@ import { getProjects } from '@/lib/api/project'
 export default function HomePage() {
 
   const [projects, setProjects] = useState([])
+  const fetchProjects = async () => {
+    const { data, error } = await getProjects()
+    if (error) {
+      console.log(error)
+      return
+    }
+    if (data != null) {
+      setProjects(data?.response.data)
+    }
+  }
 
   useEffect(() => {
-
-    const fetchProjects = async () => {
-      const { data, error } = await getProjects()
-      if (error) {
-        console.log(error)
-        return
-      }
-      if (data != null) {
-        setProjects(data?.response.data)
-      }
-    }
-
     fetchProjects()
   }, [])
 
+  const [value, setValue] = useState('')
+  const handleChange = (e: any) => {
+    setValue(e.target.value)
+  }
+
+  console.log(projects)
+
+  const handleSearch = () => {
+    if(value === '') return fetchProjects()
+    setProjects(projects.filter((project: any) => project.Name.toLowerCase().includes(value.toLowerCase())))
+  }
+
   return (
     <FullLayout>
-      <Hero />
+      <Hero value={value} handleChange={handleChange} handleSearch={handleSearch}/>
       {projects ? (
         projects.length === 0 ? (
           <div className="container mx-auto text-center text-2xl font-semibold">
-            Loading...
+            No projects found
           </div>
         ) : (
           <ProjectsList projects={projects} />

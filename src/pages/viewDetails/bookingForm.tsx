@@ -25,6 +25,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import axios from 'axios';
+import React, { useEffect } from 'react';
 
 
 interface BookingFormProps {
@@ -35,13 +37,21 @@ function BookingForm({ projectId }: BookingFormProps) {
     const navigate = useNavigate()
     const { user, token } = useAppSelector((state) => state.loginUser);
     const reduxToken = useAppSelector((state) => state.loginUser.token);
+    const [agencies, setAgencies] = React.useState([])
+    useEffect(() => {
+        axios.get("http://localhost:4000/api/agency")
+        .then(res => {
+            setAgencies(res?.data?.data)
+        })
+    }, [])
+
     const formik = useFormik({
         initialValues: {
             name: user ? user.FullName || '' : '',
             email: user ? user.Email || '' : '',
             phone: user ? user.PhoneNumber || '' : '',
             selectionMethod: 'VNPay',
-            deposit: 1000000,
+            deposit: 10000000,
             agency: 1,
         },
         validationSchema: Yup.object({
@@ -55,7 +65,7 @@ function BookingForm({ projectId }: BookingFormProps) {
                 const bookingData = {
                     projectId: projectId,
                     customerId: user ? user.id || 0 : 0,
-                    agencyId: 1,
+                    agencyId: formik.values.agency,
                     name: values.name,
                     selectionMethod: formik.values.selectionMethod,
                     email: values.email,
@@ -88,6 +98,8 @@ function BookingForm({ projectId }: BookingFormProps) {
             navigate('/login');
         }
     }
+
+    console.log(agencies)
 
     return (
         <form onSubmit={formik.handleSubmit} className="container my-10 space-y-4 col-span-1">
@@ -205,27 +217,30 @@ function BookingForm({ projectId }: BookingFormProps) {
                         value={formik.values.deposit}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
+                        disabled
                     />
                     {formik.touched.deposit && formik.errors.deposit ? (
                         <div className="text-red-500">{formik.errors.deposit}</div>
                     ) : null}
                 </div>
                 <div className='col-span-1 space-y-2'>
-                    <label htmlFor="theme" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="agency" className="block text-sm font-medium text-gray-700">
                         Agency
                     </label>
-                    <Select>
-                        <SelectTrigger className="">
-                            <SelectValue placeholder="Agency" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="1">Agency 1</SelectItem>
-                            <SelectItem value="2">Agency 2</SelectItem>
-                            <SelectItem value="3">Agency 3</SelectItem>
-                            <SelectItem value="4">Agency 4</SelectItem>
-                            <SelectItem value="5">Agency 5</SelectItem>
-                        </SelectContent>
-                    </Select>
+                    <select
+                        name="agency"
+                        value={formik.values.agency.toString()}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        style={{ display: "block" }}
+                    >
+                        {agencies.map((agency: any) => (
+                            <option key={agency?.AgencyId} value={agency?.AgencyId?.toString()} label={agency?.Name}>
+                                {agency?.Name}
+                            </option>
+                        ))}
+
+                    </select>
                 </div>
             </div>
             <div className="flex justify-center">
