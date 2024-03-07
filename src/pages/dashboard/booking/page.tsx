@@ -11,6 +11,7 @@ import { getApproveBooking } from '@/lib/api/getApproveBooking'
 export default function BookingManagement() {
   const [data, setData] = useState([])
   const [approvedData, setApprovedData] = useState([])
+  const [openingForSales, setOpeningForSales] = useState([])
   const { trigger } = useAppSelector((state) => state.trigger)
 
   useEffect(() => {
@@ -32,8 +33,18 @@ export default function BookingManagement() {
         console.log(error)
       }
     }
+    const handleGetIsSelectedBooking = async () => {
+      try {
+        const res = await getApproveBooking()
+        console.log(res)
+        setOpeningForSales(res || [])
+      } catch (error) {
+        console.log(error)
+      }
+    }
     handleGetPeddingBooking()
     handleGetApprovedBooking()
+    handleGetIsSelectedBooking()
   }, [trigger])
 
   return (
@@ -46,11 +57,15 @@ export default function BookingManagement() {
           <TabsList>
             <TabsTrigger value="cho-xac-nhan">Chờ xác nhận</TabsTrigger>
             <TabsTrigger value="da-xac-nhan">Đơn đã xác nhận</TabsTrigger>
+            <TabsTrigger value="da-trong-gio">Đơn trong giờ mở bán</TabsTrigger>
           </TabsList>
           <TabsContent value="cho-xac-nhan">
             <DataTable data={data} columns={columns} />
           </TabsContent>
           <TabsContent value="da-xac-nhan">
+            <DataTable data={approvedData} columns={columns} />
+          </TabsContent>
+          <TabsContent value="da-trong-gio">
             <DataTable data={approvedData} columns={columns} />
           </TabsContent>
         </Tabs>
