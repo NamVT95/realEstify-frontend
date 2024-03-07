@@ -77,7 +77,6 @@ function BookingForm({ projectId }: BookingFormProps) {
         },
     });
 
-    const isFormValid = Object.keys(formik.errors).length === 0 && Object.keys(formik.touched).length > 0;
 
     const handleBooking = () => {
         const token = localStorage.getItem('token');
@@ -152,9 +151,36 @@ function BookingForm({ projectId }: BookingFormProps) {
             <div className='w-full grid grid-cols-3 gap-3'>
                 <div className='col-span-1 space-y-2'>
                     <label htmlFor="theme" className="block text-sm font-medium text-gray-700">
-                        Theme
+                        Phương thức thanh toán
                     </label>
-                    <Select defaultValue={formik.values.selectionMethod}>
+                    <select
+                        name="selectionMethod"
+                        value={formik.values.selectionMethod}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        style={{ display: "block" }}
+                    >
+                        <option value="VNPay" label="VNPay">
+                        {" "}
+                        VNPay
+                        </option>
+                        <option value="Momo" label="Momo">
+                        Momo
+                        </option>
+                        <option value="ZaloPay" label="ZaloPay">
+                        ZaloPay
+                        </option>
+                        <option value="Bank" label="Bank">
+                        Bank
+                        </option>
+                        <option value="Cash" label="Cash">
+                        Cash
+                        </option>
+                    </select>
+                    {/* <Select 
+                        defaultValue={formik.values.selectionMethod}
+                        
+                    >
                         <SelectTrigger className="">
                             <SelectValue placeholder="Payment method" />
                         </SelectTrigger>
@@ -165,7 +191,7 @@ function BookingForm({ projectId }: BookingFormProps) {
                             <SelectItem value="Bank">Bank</SelectItem>
                             <SelectItem value="Cash">Cash</SelectItem>
                         </SelectContent>
-                    </Select>
+                    </Select> */}
                 </div>
                 <div className="col-span-1 space-y-2">
                     <label htmlFor="deposit" className="block text-sm font-medium text-gray-700">
