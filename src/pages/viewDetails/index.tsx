@@ -21,10 +21,9 @@ export default function ViewDetailsPage() {
                 console.log(error)
                 return
             }
-
             if (data != null) {
-                console.log(data?.data)
-                setProject(data?.data)
+                console.log(data?.response.data)
+                setProject(data?.response.data)
             }
         }
 
@@ -38,7 +37,7 @@ export default function ViewDetailsPage() {
             {project ? (
                 <div className='container my-10 space-y-4'>
                     <div>
-                        <img src={project.Thumbnail} alt={project.Name} />
+                        <img src={project.Thumbnail} alt={project.Name} className="rounded-md" />
                     </div>
                     <div className="my-8 space-y-4">
                         <div className="text-2xl font-semibold text-red-500">Overal:</div>
@@ -60,7 +59,7 @@ export default function ViewDetailsPage() {
                                 <div className="text-lg font-semibold">
                                     Investor name:
                                     <div className="text-base font-normal">
-                                        {project.Investor.name}
+                                        {project.Investor.Name}
                                     </div>
                                 </div>
                             </div>
@@ -120,7 +119,53 @@ export default function ViewDetailsPage() {
                             </div>
                         </Card>
                     </div>
+                    <div className="my-8 space-y-4">
+                        <div className="text-2xl font-semibold text-red-500">Investor:</div>
+                        <div className="">{project.Description}</div>
+                    </div>
                     <div>
+                        <Card className="grid grid-cols-2 gap-4 py-8 px-16 space-y-4">
+                            <div className="col-span-1 flex  items-center gap-4">
+                                <Building2 size={32} />
+                                <div className="text-lg font-semibold">
+                                    Name:
+                                    <div className="text-base font-normal">
+                                        {project.Investor.Name}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-span-1 flex  items-center gap-4">
+                                <UsersRound size={32} />
+                                <div className="text-lg font-semibold">
+                                    Email:
+                                    <div className="text-base font-normal">
+                                        {project.Investor.Email}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-span-1 flex  items-center gap-4">
+                                <MapPin size={32} />
+                                <div className="text-lg font-semibold">
+                                    Phone number:
+                                    <div className="text-base font-normal">
+                                        {project.Investor.PhoneNumber}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-span-1 flex  items-center gap-4">
+                                <Building2 size={32} />
+                                <div className="text-lg font-semibold">
+                                    Address:
+                                    <div className="text-base font-normal">
+                                        {project.Investor.Address}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </Card>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                        <img src={project.Thumbnail} alt={project.Name} className="col-span-1 h-full w-full rounded-md" />
                         <BookingForm projectId={projectId} />
                     </div>
                 </div>

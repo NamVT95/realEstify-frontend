@@ -1,9 +1,9 @@
 export interface InvestorInterface {
-  investorId: number;
-  name: string;
-  email: string;
-  phoneNumber: string;
-  address: string;
+  InvestorId: number;
+  Name: string;
+  Email: string;
+  PhoneNumber: string;
+  Address: string;
 }
 
 // {

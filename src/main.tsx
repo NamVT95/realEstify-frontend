@@ -16,6 +16,14 @@ import DashboardLayout from './pages/dashboard/layout.tsx';
 import LoginPage from './pages/authentication/login/page.tsx';
 import Register from './pages/authentication/register/page.tsx';
 import ProfileForm from './pages/profile/components/ProfileForm.tsx';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import AdminDashboardLayout from './pages/admin-dashboard/layout.tsx';
+import Project from './pages/admin-dashboard/project/page.tsx';
+import CustomerPage from './pages/admin-dashboard/customer/page.tsx';
+import AgencyPage from './pages/admin-dashboard/agency/page.tsx';
+import AgencyRoute from './route/agencyRoute.tsx';
+import InvestorRoute from './route/investorRoute.tsx';
 
 const router = createBrowserRouter([
   {
@@ -40,28 +48,48 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout />,
+    element: (
+      <AgencyRoute>
+        <DashboardLayout />
+      </AgencyRoute>
+    ),
     children: [
       {
         path: "booking",
         element: <BookingManagement />,
       },
       {
+        path: "setting",
+        element: <ProfileForm />,
+      },
+    ],
+  },
+  {
+    path: "/admin-dashboard",
+    element:
+      <AdminDashboardLayout />
+    ,
+    children: [
+      {
         path: "project",
-        element: <div>Project Management</div>,
+        element: <Project />,
       },
       {
-        path: "user",
-        element: <div>User Management</div>,
+        path: "customer",
+        element: <CustomerPage />,
       },
       {
-        path: "user",
-        element: <div>User Management</div>,
+        path: "booking",
+        element: <BookingManagement />,
+      },
+      {
+        path: "agency",
+        element: <AgencyPage />,
       },
       {
         path: "setting",
         element: <ProfileForm />,
-      }
+      },
     ],
   },
   {
@@ -70,10 +98,22 @@ const router = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <RouterProvider router={router} />
     </Provider>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);

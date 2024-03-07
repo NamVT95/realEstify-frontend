@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Button } from "@/components/ui/button";
@@ -15,8 +15,16 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { useToast } from "@/components/ui/use-toast"
-import { notification } from 'antd'
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useAppDispatch, useAppSelector } from '@/hooks/useStore';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
 
 interface BookingFormProps {
@@ -24,47 +32,44 @@ interface BookingFormProps {
 }
 
 function BookingForm({ projectId }: BookingFormProps) {
-    const { toast } = useToast()
+    const navigate = useNavigate()
+    const { user, token } = useAppSelector((state) => state.loginUser);
+    const reduxToken = useAppSelector((state) => state.loginUser.token);
     const formik = useFormik({
         initialValues: {
-            projectId: projectId,
-            name: '',
-            email: '',
-            phone: '',
+            name: user ? user.FullName || '' : '',
+            email: user ? user.Email || '' : '',
+            phone: user ? user.PhoneNumber || '' : '',
+            selectionMethod: 'VNPay',
+            deposit: 1000000,
+            agency: 1,
         },
         validationSchema: Yup.object({
             name: Yup.string().min(3, 'Name must be at least 3 characters').required('Name is required'),
             email: Yup.string().email('Invalid email address').required('Email is required'),
             phone: Yup.string().min(10, "Not a valid phone number").matches(/^[0-9]+$/, 'Phone must be a number').required('Phone number is required'),
+            deposit: Yup.number().min(1000000, 'Deposit must be at least 1,000,000 VND').required('Deposit is required'),
         }),
         onSubmit: async (values) => {
             try {
                 const bookingData = {
-                    project_id: projectId,
+                    projectId: projectId,
+                    customerId: user ? user.id || 0 : 0,
+                    agencyId: 1,
                     name: values.name,
+                    selectionMethod: formik.values.selectionMethod,
                     email: values.email,
                     phone: values.phone,
+                    AmountDeposit: formik.values.deposit,
                 };
                 console.log(bookingData);
-
-                const result = await postBookingProperties(bookingData);
-                console.log(result.data.message);
-                notification.success({
-                    message: 'Booking successful',
-                    description: result.data.message,
-                    placement: 'topRight',
-                    duration: 2,
-                })
-                if (result.error) {
-                    console.error("Error:", result.error);
-                    notification.error({
-                        message: 'Booking failed',
-                        description: result.error,
-                        placement: 'topRight',
-                        duration: 2,
-                    })
+                const { error, data } = await postBookingProperties(bookingData);
+                console.log(data);
+                if (error) {
+                    toast.error('Booking failed');
                 } else {
-                    console.log("Booking successful:", result.data);
+                    toast.success('Booking successfully');
+                    formik.resetForm();
                 }
             } catch (error) {
                 console.error("Error:", error);
@@ -74,8 +79,19 @@ function BookingForm({ projectId }: BookingFormProps) {
 
     const isFormValid = Object.keys(formik.errors).length === 0 && Object.keys(formik.touched).length > 0;
 
+    const handleBooking = () => {
+        const token = localStorage.getItem('token');
+
+        if (token && reduxToken) {
+            formik.handleSubmit();
+        } else {
+            toast.error('You need to login first');
+            navigate('/login');
+        }
+    }
+
     return (
-        <form onSubmit={formik.handleSubmit} className="container my-10 space-y-4">
+        <form onSubmit={formik.handleSubmit} className="container my-10 space-y-4 col-span-1">
             <div className="flex items-center text-2xl font-semibold text-red-500">
                 Booking:
             </div>
@@ -91,12 +107,13 @@ function BookingForm({ projectId }: BookingFormProps) {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     placeholder="Enter your name"
+                    disabled={user ? true : false}
                 />
                 {formik.touched.name && formik.errors.name ? (
                     <div className="text-red-500">{formik.errors.name}</div>
                 ) : null}
             </div>
-            <div>
+            <div className='space-y-2'>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                     Email
                 </label>
@@ -108,12 +125,13 @@ function BookingForm({ projectId }: BookingFormProps) {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     placeholder="Enter your email"
+                    disabled={user ? true : false}
                 />
                 {formik.touched.email && formik.errors.email ? (
                     <div className="text-red-500">{formik.errors.email}</div>
                 ) : null}
             </div>
-            <div>
+            <div className='space-y-2'>
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                     Phone
                 </label>
@@ -125,15 +143,69 @@ function BookingForm({ projectId }: BookingFormProps) {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     placeholder="Enter your phone number"
+                    disabled={user ? true : false}
                 />
                 {formik.touched.phone && formik.errors.phone ? (
                     <div className="text-red-500">{formik.errors.phone}</div>
                 ) : null}
             </div>
+            <div className='w-full grid grid-cols-3 gap-3'>
+                <div className='col-span-1 space-y-2'>
+                    <label htmlFor="theme" className="block text-sm font-medium text-gray-700">
+                        Theme
+                    </label>
+                    <Select defaultValue={formik.values.selectionMethod}>
+                        <SelectTrigger className="">
+                            <SelectValue placeholder="Payment method" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="VNPay">VNPay</SelectItem>
+                            <SelectItem value="Momo">Momo</SelectItem>
+                            <SelectItem value="ZaloPay">ZaloPay</SelectItem>
+                            <SelectItem value="Bank">Bank</SelectItem>
+                            <SelectItem value="Cash">Cash</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="col-span-1 space-y-2">
+                    <label htmlFor="deposit" className="block text-sm font-medium text-gray-700">
+                        Deposit
+                    </label>
+                    <Input
+                        id="deposit"
+                        name="deposit"
+                        type="number"
+                        placeholder="Enter your phone number"
+                        value={formik.values.deposit}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.deposit && formik.errors.deposit ? (
+                        <div className="text-red-500">{formik.errors.deposit}</div>
+                    ) : null}
+                </div>
+                <div className='col-span-1 space-y-2'>
+                    <label htmlFor="theme" className="block text-sm font-medium text-gray-700">
+                        Agency
+                    </label>
+                    <Select>
+                        <SelectTrigger className="">
+                            <SelectValue placeholder="Agency" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="1">Agency 1</SelectItem>
+                            <SelectItem value="2">Agency 2</SelectItem>
+                            <SelectItem value="3">Agency 3</SelectItem>
+                            <SelectItem value="4">Agency 4</SelectItem>
+                            <SelectItem value="5">Agency 5</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+            </div>
             <div className="flex justify-center">
                 <AlertDialog>
-                    <AlertDialogTrigger className={`w-full ${!isFormValid ? 'cursor-not-allowed' : ''}`} disabled={!isFormValid}>
-                        <Button className='w-full' disabled={!isFormValid} type='button'>
+                    <AlertDialogTrigger className={`w-full`} >
+                        <Button className='w-full' type='button'>
                             Send
                         </Button>
                     </AlertDialogTrigger>
@@ -147,7 +219,7 @@ function BookingForm({ projectId }: BookingFormProps) {
                         <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
                             <AlertDialogAction type='submit' onClick={() => {
-                                formik.handleSubmit();
+                                handleBooking();
                             }}>Okay</AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>
