@@ -2,6 +2,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/hooks/useStore";
+import { formatPrice } from "@/lib/formatting";
 import { cn } from "@/lib/utils";
 import { updateInfo } from "@/store/auth/loginUserSlice";
 import { Form, Input } from 'antd';
@@ -199,6 +200,7 @@ export default function ProfilePage() {
                                             <p>Payment method: {booking?.SelectionMethod}</p>
                                             <p>Agency Name: {booking?.Agency?.Name}</p>
                                             <p>Project Name: {booking?.Project?.Name}</p>
+                                            <p>Amount Deposit: {formatPrice(booking?.AmountDeposit)}</p>
                                         </div>
                                         <div>
                                             <Link to={"/detail/"+booking?.Project?.ProjectId}>
