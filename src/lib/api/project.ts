@@ -17,3 +17,20 @@ export const getProjectById = async (projectId: number) => {
     return handleApiError(error);
   }
 };
+
+export const createOpenForSale = async (
+  projectId: number,
+  startTime: string,
+  endTime: string
+) => {
+  try {
+    const { data } = await axiosClient.post(`/api/investor/opening-for-sale`, {
+      projectId,
+      startTime,
+      endTime,
+    });
+    return { error: null, data };
+  } catch (error) {
+    return handleApiError(error);
+  }
+};

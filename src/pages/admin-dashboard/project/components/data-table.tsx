@@ -38,6 +38,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { useAppDispatch } from "@/hooks/useStore"
+import { openUpdateForm } from "@/store/project/updateProjectSlice"
 
 // {
 //   ProjectId: 3,
@@ -67,29 +69,29 @@ import {
 // },
 
 export type DataType = {
-    ProjectId: number
-    Name: string
+  ProjectId: number
+  Name: string
+  InvestorId: number
+  Email: string
+  Location: string
+  Thumbnail: string
+  Type: string
+  NumberOfApartments: number
+  NumberOfShops: number
+  LandArea: number
+  ConstructionDensity: number
+  Status: string
+  StartDate: string
+  EndDate: string
+  Description: string
+  Investor: {
     InvestorId: number
+    Name: string
     Email: string
-    Location: string
-    Thumbnail: string
-    Type: string
-    NumberOfApartments: number
-    NumberOfShops: number
-    LandArea: number
-    ConstructionDensity: number
-    Status: string
-    StartDate: string
-    EndDate: string
-    Description: string
-    Investor: {
-        InvestorId: number
-        Name: string
-        Email: string
-        PhoneNumber: string
-        Address: string
-        UserId: number
-    }
+    PhoneNumber: string
+    Address: string
+    UserId: number
+  }
 }
 
 export const columns: ColumnDef<DataType>[] = [
@@ -180,7 +182,7 @@ export const columns: ColumnDef<DataType>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const DataType = row.original
-
+      const dispatch = useAppDispatch()
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -194,6 +196,9 @@ export const columns: ColumnDef<DataType>[] = [
             <DropdownMenuItem>View Details</DropdownMenuItem>
             <DropdownMenuItem>Update</DropdownMenuItem>
             <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {
+              dispatch(openUpdateForm({ projectId: DataType.ProjectId }))
+            }}>Set open sale</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -201,7 +206,7 @@ export const columns: ColumnDef<DataType>[] = [
   },
 ]
 
-export function DataTable({data}:any) {
+export function DataTable({ data }: any) {
   console.log(data)
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -279,9 +284,9 @@ export function DataTable({data}:any) {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   )
                 })}
