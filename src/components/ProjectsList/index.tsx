@@ -11,7 +11,7 @@ export default function ProjectsList({
   return (
     <div className='container my-10 space-y-4'>
       <div className=" text-gray-700 text-2xl font-semibold leading-8">Projects Listing</div>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-4 space-y-28 justify-stretch justify-self-stretch justify-items-stretch">
         {
           projects.map((project, index) => (
             <ProjectCard project={project} key={index} />
