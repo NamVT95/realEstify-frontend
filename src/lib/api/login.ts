@@ -10,13 +10,20 @@ export const login = async (username: string, password: string) => {
       password,
     });
     console.log(data);
-    const decode = jwtDecode(data.token);
-    console.log(JSON.stringify(decode));
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(decode));
-    return { error: null, data, user: decode as User };
+    if (data.token) {
+      const decode = jwtDecode(data.token);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(decode));
+      toast.success(data.mes);
+      return { error: null, data, user: decode as User };
+    } else {
+      toast.error("An error occurred while logging in");
+    }
   } catch (error) {
-    console.log(error);
-    toast.error("An error occurred while logging in");
+    if ((error as any)?.response?.data?.mes) {
+      toast.error((error as any).response?.data?.mes);
+    } else {
+      toast.error("An error occurred while logging in");
+    }
   }
 };

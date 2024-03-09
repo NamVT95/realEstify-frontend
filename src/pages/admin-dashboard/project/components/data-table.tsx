@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/table"
 import { useAppDispatch } from "@/hooks/useStore"
 import { openUpdateForm } from "@/store/project/updateProjectSlice"
+import { Link } from "react-router-dom"
 
 // {
 //   ProjectId: 3,
@@ -193,7 +194,7 @@ export const columns: ColumnDef<DataType>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>View Details</DropdownMenuItem>
+            <DropdownMenuItem><Link to={`/admin-dashboard/project/${row.getValue("ProjectId")}`}>View Details</Link></DropdownMenuItem>
             <DropdownMenuItem>Update</DropdownMenuItem>
             <DropdownMenuItem>Delete</DropdownMenuItem>
             <DropdownMenuItem onClick={() => {

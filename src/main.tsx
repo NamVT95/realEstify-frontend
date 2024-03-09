@@ -25,6 +25,7 @@ import AgencyPage from './pages/admin-dashboard/agency/page.tsx';
 import AgencyRoute from './route/agencyRoute.tsx';
 import InvestorRoute from './route/investorRoute.tsx';
 import CreateProjectPage from './pages/admin-dashboard/project/create/page.tsx';
+import ProjectDetail from './pages/project-details/page.tsx';
 
 const router = createBrowserRouter([
   {
@@ -95,6 +96,10 @@ const router = createBrowserRouter([
         path: "setting",
         element: <ProfileForm />,
       },
+      {
+        path: "project/:id",
+        element: <ProjectDetail />,
+      }
     ],
   },
   {

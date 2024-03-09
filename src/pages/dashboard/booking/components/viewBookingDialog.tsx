@@ -16,6 +16,7 @@ import { acceptBooking } from "@/lib/api/acceptBooking";
 import { useState } from "react";
 import { useAppDispatch } from "@/hooks/useStore";
 import { switchTrigger } from "@/store/renderTrigger";
+import { rejectBooking } from "@/lib/api/rejectBooking";
 
 interface ViewBookingDialogProps {
     open: boolean;
@@ -32,15 +33,18 @@ export default function ViewBookingDialog({
     const [isloading, setIsLoading] = useState(false);
     const dispatch = useAppDispatch();
 
-    const handleReject = () => {
-        console.log("reject");
-        setOpen && setOpen(false);
+    const handleReject = async () => {
+        await rejectBooking(row.BookingId).then(() => {
+            setIsLoading(false);
+            setOpen && setOpen(false);
+        }).finally(() => {
+            dispatch(switchTrigger())
+        });
     };
 
     const handleAccept = async () => {
         setIsLoading(true);
-        console.log("accept");
-        const data = await acceptBooking(row.BookingId).then(() => {
+        await acceptBooking(row.BookingId).then(() => {
             setIsLoading(false);
             setOpen && setOpen(false);
         }).finally(() => {

@@ -16,6 +16,7 @@ import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 import { useAppDispatch } from "@/hooks/useStore"
 import { loginSlice } from "@/store/auth/loginUserSlice"
+import { set } from "date-fns"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
@@ -43,26 +44,11 @@ export function UserLoginForm({ className, ...props }: UserAuthFormProps) {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formLoginSchema>) {
     setIsLoading(true)
-    if (values?.userName === "admin_1" && values?.password === "123456") {
-      setIsLoading(false)
-      dispatch(loginSlice({
-        user: {
-          id: 1,
-          Role: "admin",
-          email: "admin@gmail.com",
-          name: "Admin"
-        },
-        data: {
-          token: "admin_token_1234567890"
-        }
-      }))
-      navigate("/admin-dashboard")
-    } else {
-      const res = await login(values.userName, values.password)
-        .then((res) => {
-          setIsLoading(false)
-          toast.success("Login successful")
-          dispatch(loginSlice(res))
+    const res = await login(values.userName, values.password)
+      .then((res) => {
+        setIsLoading(false)
+        dispatch(loginSlice(res))
+        setTimeout(() => {
           if (res?.user?.Role === "agency") {
             navigate("/dashboard")
           } else if (res?.user?.Role === "investor" || res?.user?.Role === "admin") {
@@ -70,8 +56,9 @@ export function UserLoginForm({ className, ...props }: UserAuthFormProps) {
           } else {
             navigate("/")
           }
-        })
-    }
+        }, 1000)
+
+      })
   }
 
   return (

@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { ColumnDef } from "@tanstack/react-table"
-import { format } from "date-fns"
-import { Booking } from "../data/schema"
-import { DataTableColumnHeader } from "./data-table-column-header"
-import { Badge } from "@/components/ui/badge"
-import { formatPrice } from "@/lib/formatting"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ColumnDef } from "@tanstack/react-table";
+import { format } from "date-fns";
+import { Booking } from "../data/schema";
+import { DataTableColumnHeader } from "./data-table-column-header";
+import { Badge } from "@/components/ui/badge";
+import { formatPrice } from "@/lib/formatting";
 
 export const columns: ColumnDef<Booking>[] = [
   // {
@@ -60,7 +60,7 @@ export const columns: ColumnDef<Booking>[] = [
         <div className="flex space-x-2">
           <div className="">{(row.getValue("Customer") as any).FullName}</div>
         </div>
-      )
+      );
     },
   },
   {
@@ -79,7 +79,7 @@ export const columns: ColumnDef<Booking>[] = [
             {format(new Date(row.getValue("BookingDate")), "HH:mm dd/MM/yyyy")}
           </span>
         </div>
-      )
+      );
     },
   },
   {
@@ -87,7 +87,9 @@ export const columns: ColumnDef<Booking>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="SelectionMethod" />
     ),
-    cell: ({ row }) => <div className="">{row.getValue("SelectionMethod")}</div>,
+    cell: ({ row }) => (
+      <div className="">{row.getValue("SelectionMethod")}</div>
+    ),
     enableSorting: false,
     enableHiding: false,
   },
@@ -97,15 +99,21 @@ export const columns: ColumnDef<Booking>[] = [
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      const status: string = row.getValue("Status")
+      const status: string = row.getValue("Status");
       return (
-        <Badge className={`${status.toLowerCase() === "approved" ? "bg-green-200 text-green-500 hover:bg-green-200" : "bg-slate-200 text-slate-500 hover:bg-slate-200"}`}>
+        <Badge
+          className={`
+          ${status.toLowerCase() === "approved" && "bg-green-200 text-green-500 hover:bg-green-200"} 
+          ${status.toLowerCase() === "rejected" && "bg-red-200 text-red-500 hover:bg-red-200"} 
+          ${status.toLowerCase() === "pending" && "bg-yellow-200 text-yellow-500 hover:bg-yellow-200"}
+          `}
+        >
           {row.getValue("Status")}
         </Badge>
-      )
+      );
     },
     filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id))
+      return value.includes(row.getValue(id));
     },
   },
   {
@@ -114,14 +122,10 @@ export const columns: ColumnDef<Booking>[] = [
       <DataTableColumnHeader column={column} title="Deposit" />
     ),
     cell: ({ row }) => {
-      return (
-        <div>
-          {formatPrice(row.getValue("AmountDeposit"))}
-        </div>
-      )
+      return <div>{formatPrice(row.getValue("AmountDeposit"))}</div>;
     },
     filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id))
+      return value.includes(row.getValue(id));
     },
   },
-]
+];

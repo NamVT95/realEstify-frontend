@@ -5,20 +5,24 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useEffect, useState } from 'react'
 import { get } from 'http'
 import { getPeddingBooking } from '@/lib/api/getPeddingBooking'
-import { useAppSelector } from '@/hooks/useStore'
+import { useAppDispatch, useAppSelector } from '@/hooks/useStore'
 import { getApproveBooking } from '@/lib/api/getApproveBooking'
+import { getRejectedBooking } from '@/lib/api/getRejectBooking'
+import { Button } from '@/components/ui/button'
+import { switchTrigger } from '@/store/renderTrigger'
 
 export default function BookingManagement() {
   const [data, setData] = useState([])
   const [approvedData, setApprovedData] = useState([])
   const [openingForSales, setOpeningForSales] = useState([])
+  const [rejectedData, setRejectedData] = useState([])
   const { trigger } = useAppSelector((state) => state.trigger)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     const handleGetPeddingBooking = async () => {
       try {
         const res = await getPeddingBooking()
-        console.log(res.response.data)
         setData(res.response.data)
       } catch (error) {
         console.log(error)
@@ -27,7 +31,6 @@ export default function BookingManagement() {
     const handleGetApprovedBooking = async () => {
       try {
         const res = await getApproveBooking()
-        console.log(res)
         setApprovedData(res || [])
       } catch (error) {
         console.log(error)
@@ -36,12 +39,21 @@ export default function BookingManagement() {
     const handleGetIsSelectedBooking = async () => {
       try {
         const res = await getApproveBooking()
-        console.log(res)
         setOpeningForSales(res || [])
       } catch (error) {
         console.log(error)
       }
     }
+
+    const handleGetRejectedBooking = async () => {
+      try {
+        const res = await getRejectedBooking()
+        setRejectedData(res || [])
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    handleGetRejectedBooking()
     handleGetPeddingBooking()
     handleGetApprovedBooking()
     handleGetIsSelectedBooking()
@@ -49,14 +61,18 @@ export default function BookingManagement() {
 
   return (
     <div className='flex flex-col gap-8'>
-      <div>
+      <div className='w-full flex gap-4 justify-between items-center'>
         <h1 className='font-bold text-2xl'>Booking Management</h1>
+        <Button onClick={() => dispatch(switchTrigger())}>
+          Reload Data
+        </Button>
       </div>
       <div className='bg-white p-2'>
         <Tabs defaultValue="cho-xac-nhan">
-          <TabsList>
+          <TabsList >
             <TabsTrigger value="cho-xac-nhan">Chờ xác nhận</TabsTrigger>
             <TabsTrigger value="da-xac-nhan">Đơn đã xác nhận</TabsTrigger>
+            <TabsTrigger value="da-huy-bo">Đơn đã hủy</TabsTrigger>
             <TabsTrigger value="da-trong-gio">Đơn trong giờ mở bán</TabsTrigger>
           </TabsList>
           <TabsContent value="cho-xac-nhan">
@@ -65,8 +81,11 @@ export default function BookingManagement() {
           <TabsContent value="da-xac-nhan">
             <DataTable data={approvedData} columns={columns} />
           </TabsContent>
+          <TabsContent value="da-huy-bo">
+            <DataTable data={rejectedData} columns={columns} />
+          </TabsContent>
           <TabsContent value="da-trong-gio">
-            <DataTable data={approvedData} columns={columns} />
+            <DataTable data={openingForSales} columns={columns} />
           </TabsContent>
         </Tabs>
       </div>
