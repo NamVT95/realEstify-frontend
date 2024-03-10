@@ -38,6 +38,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Link } from "react-router-dom"
 
 // CustomerId: 1,
 // UserId: 4,
@@ -149,8 +150,16 @@ export const columns: ColumnDef<DataType>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Update</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to={`/admin-dashboard/customer/${DataType.CustomerId}`}>
+                Edit
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to={`/admin-dashboard/customer/${DataType.CustomerId}/booking`}>
+                View booking
+              </Link>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )

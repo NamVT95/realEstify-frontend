@@ -26,6 +26,9 @@ import AgencyRoute from './route/agencyRoute.tsx';
 import InvestorRoute from './route/investorRoute.tsx';
 import CreateProjectPage from './pages/admin-dashboard/project/create/page.tsx';
 import ProjectDetail from './pages/project-details/page.tsx';
+import CreateCustomerPage from './pages/admin-dashboard/customer/page/CreateCustomerPage.tsx';
+import UpdateCustomerPage from './pages/admin-dashboard/customer/page/UpdateCustomerPage.tsx';
+import ViewBookingCustomer from './pages/admin-dashboard/customer/page/ViewBookingCustomer.tsx';
 
 const router = createBrowserRouter([
   {
@@ -83,6 +86,18 @@ const router = createBrowserRouter([
       {
         path: "customer",
         element: <CustomerPage />,
+      },
+      {
+        path: "customer/create",
+        element: <CreateCustomerPage />,
+      },
+      {
+        path: "customer/:id",
+        element: <UpdateCustomerPage />,
+      },
+      {
+        path: "customer/:id/booking",
+        element: <ViewBookingCustomer />,
       },
       {
         path: "booking",
