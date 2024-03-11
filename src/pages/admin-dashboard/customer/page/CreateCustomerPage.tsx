@@ -1,4 +1,4 @@
-import UserRegisterForm from './UserRegisterForm';
+import UserRegisterForm from '../../agency/components/UserRegisterForm';
 
 export default function CreateCustomerPage() {
   

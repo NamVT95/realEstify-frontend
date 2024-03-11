@@ -31,6 +31,7 @@ import AgencyRoute from './route/agencyRoute.tsx';
 import { store } from './store/store.ts';
 import CreateCustomerPage from './pages/admin-dashboard/customer/page/CreateCustomerPage.tsx';
 import CreateAgencyPage from './pages/admin-dashboard/agency/components/CreateAgencyPage.tsx';
+import UpdateAgencyPage from './pages/admin-dashboard/agency/components/UpdateAgencyPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -103,7 +104,7 @@ const router = createBrowserRouter([
       },
       {
         path: "agency/:id",
-        element: <>s</>,
+        element: <UpdateAgencyPage />,
       },
       {
         path: "customer/:id",
