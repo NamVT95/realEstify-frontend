@@ -29,6 +29,7 @@ import ProjectDetail from './pages/project-details/page.tsx';
 import CreateCustomerPage from './pages/admin-dashboard/customer/page/CreateCustomerPage.tsx';
 import UpdateCustomerPage from './pages/admin-dashboard/customer/page/UpdateCustomerPage.tsx';
 import ViewBookingCustomer from './pages/admin-dashboard/customer/page/ViewBookingCustomer.tsx';
+import SelectPropertyForBooking from './pages/dashboard/booking/selectPropertyTable/page.tsx';
 
 const router = createBrowserRouter([
   {
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
       {
         path: "setting",
         element: <ProfileForm />,
+      },
+      {
+        path: "booking/select-property/:slug",
+        element: <SelectPropertyForBooking />,
       },
     ],
   },

@@ -1,4 +1,5 @@
 import { DataTable } from './components/data-table'
+import { DataTable2 } from "./selectPropertyTable/data-table";
 import { columns } from './components/columns'
 import { BOOKING_DATA, MOCK_BOOKING_DATA } from './data/data'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -85,7 +86,7 @@ export default function BookingManagement() {
             <DataTable data={rejectedData} columns={columns} />
           </TabsContent>
           <TabsContent value="da-trong-gio">
-            <DataTable data={openingForSales} columns={columns} />
+            <DataTable2 data={openingForSales} columns={columns} />
           </TabsContent>
         </Tabs>
       </div>
