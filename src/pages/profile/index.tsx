@@ -93,8 +93,8 @@ export default function ProfilePage() {
         const fetchUserData = () => {
             axios.get("http://localhost:4000/api/booking")
                 .then(res => {
-                    console.log((res?.data?.data as any[]).filter(item => item.CustomerId = user?.id))
-                    setBookings((res?.data?.data as any[]).filter(item => item.CustomerId = user?.id))
+                    console.log((res?.data?.data as any[]).filter(item => item.Customer.UserId = user?.id))
+                    setBookings((res?.data?.data as any[]).filter(item => item.Customer.UserId = user?.id))
 
                 })
                 .catch(err => {
@@ -105,7 +105,6 @@ export default function ProfilePage() {
     }, [])
 
     const currentUser = useAppSelector(state => state.loginUser.user)
-    console.log(currentUser)
 
     const [payments, setPayments] = useState([
         {
