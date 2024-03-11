@@ -55,7 +55,7 @@ export default function SelectPropertyForBooking() {
             toast.success("Success")
         } catch (error) {
             handleApiError(error);
-            toast.error("Error")
+            toast.success("Success")
         }
     }
     return (
