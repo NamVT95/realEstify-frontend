@@ -24,6 +24,7 @@ export default function BookingManagement() {
     const handleGetPeddingBooking = async () => {
       try {
         const res = await getPeddingBooking()
+        console.log(res.response.data)
         setData(res.response.data)
       } catch (error) {
         console.log(error)

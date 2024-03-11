@@ -36,13 +36,30 @@ interface BookingFormProps {
 function BookingForm({ projectId }: BookingFormProps) {
     const navigate = useNavigate()
     const { user, token } = useAppSelector((state) => state.loginUser);
+    console.log(user)
     const reduxToken = useAppSelector((state) => state.loginUser.token);
     const [agencies, setAgencies] = React.useState([])
+    const [customerId, setCustomerId] = React.useState(16)
     useEffect(() => {
         axios.get("http://localhost:4000/api/agency")
         .then(res => {
             setAgencies(res?.data?.data)
         })
+        .catch(err => {
+            console.log(err)
+        }
+        )
+
+        axios.get("http://localhost:4000/api/customer")
+        .then(res => {
+            console.log(res?.data?.data)
+            console.log(res?.data?.data?.filter((data: any) => data.UserId == user?.id)[0]?.CustomerId)
+            setCustomerId(res?.data?.data?.filter((data: any) => data.UserId == user?.id)[0]?.CustomerId)
+        })
+        .catch(err => {
+            console.log(err)
+        }
+        )
     }, [])
 
     const formik = useFormik({
@@ -64,7 +81,7 @@ function BookingForm({ projectId }: BookingFormProps) {
             try {
                 const bookingData = {
                     projectId: projectId,
-                    customerId: user ? user.id || 0 : 0,
+                    customerId: user ? customerId || 0 : 0,
                     agencyId: formik.values.agency,
                     name: values.name,
                     selectionMethod: formik.values.selectionMethod,

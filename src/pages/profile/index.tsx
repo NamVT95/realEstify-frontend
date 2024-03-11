@@ -62,7 +62,10 @@ export default function ProfilePage() {
         console.log('Success:', values);
       //   call ap
           axios.put("http://localhost:4000/api/customer/"+user?.id, {
-              ...values
+                fullName: values.fullname,
+                email: values.email,
+                phoneNumber: values.phoneNumber,
+                address: values.address,
           })
           .then(res => {
               console.log(res)
@@ -143,7 +146,7 @@ export default function ProfilePage() {
                                         name="fullname"
                                         rules={[{ required: true, message: 'Please input your username!' }]}
                                         >
-                                        <Input disabled/>
+                                        <Input />
                                     </Form.Item>
 
                                     <Form.Item<FieldType>

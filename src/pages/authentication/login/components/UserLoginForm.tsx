@@ -47,6 +47,7 @@ export function UserLoginForm({ className, ...props }: UserAuthFormProps) {
     const res = await login(values.userName, values.password)
       .then((res) => {
         setIsLoading(false)
+        console.log(res)
         dispatch(loginSlice(res))
         setTimeout(() => {
           if (res?.user?.Role === "agency") {
