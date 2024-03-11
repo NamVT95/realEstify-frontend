@@ -5,32 +5,32 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import './index.css';
-import BookingManagement from './pages/dashboard/booking/page.tsx';
-import HomePage from './pages/home/index.tsx';
-import NotFound from './pages/notFound/index.tsx';
-import ProfilePage from './pages/profile/index.tsx';
-import ViewDetailsPage from './pages/viewDetails/index.tsx';
-import { store } from './store/store.ts';
-import DashboardLayout from './pages/dashboard/layout.tsx';
-import LoginPage from './pages/authentication/login/page.tsx';
-import Register from './pages/authentication/register/page.tsx';
-import ProfileForm from './pages/profile/components/ProfileForm.tsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import AdminDashboardLayout from './pages/admin-dashboard/layout.tsx';
-import Project from './pages/admin-dashboard/project/page.tsx';
-import CustomerPage from './pages/admin-dashboard/customer/page.tsx';
+import './index.css';
 import AgencyPage from './pages/admin-dashboard/agency/page.tsx';
-import AgencyRoute from './route/agencyRoute.tsx';
-import InvestorRoute from './route/investorRoute.tsx';
-import CreateProjectPage from './pages/admin-dashboard/project/create/page.tsx';
-import ProjectDetail from './pages/project-details/page.tsx';
-import CreateCustomerPage from './pages/admin-dashboard/customer/page/CreateCustomerPage.tsx';
+import CustomerPage from './pages/admin-dashboard/customer/page.tsx';
 import UpdateCustomerPage from './pages/admin-dashboard/customer/page/UpdateCustomerPage.tsx';
 import ViewBookingCustomer from './pages/admin-dashboard/customer/page/ViewBookingCustomer.tsx';
-import SelectPropertyForBooking from './pages/dashboard/booking/selectPropertyTable/page.tsx';
 import ViewPayment from './pages/admin-dashboard/customer/page/ViewPayment.tsx';
+import AdminDashboardLayout from './pages/admin-dashboard/layout.tsx';
+import CreateProjectPage from './pages/admin-dashboard/project/create/page.tsx';
+import Project from './pages/admin-dashboard/project/page.tsx';
+import LoginPage from './pages/authentication/login/page.tsx';
+import Register from './pages/authentication/register/page.tsx';
+import BookingManagement from './pages/dashboard/booking/page.tsx';
+import SelectPropertyForBooking from './pages/dashboard/booking/selectPropertyTable/page.tsx';
+import DashboardLayout from './pages/dashboard/layout.tsx';
+import HomePage from './pages/home/index.tsx';
+import NotFound from './pages/notFound/index.tsx';
+import ProfileForm from './pages/profile/components/ProfileForm.tsx';
+import ProfilePage from './pages/profile/index.tsx';
+import ProjectDetail from './pages/project-details/page.tsx';
+import ViewDetailsPage from './pages/viewDetails/index.tsx';
+import AgencyRoute from './route/agencyRoute.tsx';
+import { store } from './store/store.ts';
+import CreateCustomerPage from './pages/admin-dashboard/customer/page/CreateCustomerPage.tsx';
+import CreateAgencyPage from './pages/admin-dashboard/agency/components/CreateAgencyPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -96,6 +96,14 @@ const router = createBrowserRouter([
       {
         path: "customer/create",
         element: <CreateCustomerPage />,
+      },
+      {
+        path: "agency/create",
+        element: <CreateAgencyPage />,
+      },
+      {
+        path: "agency/:id",
+        element: <>s</>,
       },
       {
         path: "customer/:id",
