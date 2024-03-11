@@ -38,6 +38,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { useNavigate } from "react-router-dom"
 
 // AgencyId: 1,
 // UserId: 4,
@@ -123,6 +124,7 @@ export const columns: ColumnDef<DataType>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const DataType = row.original
+      const navigate = useNavigate()
 
       return (
         <DropdownMenu>
@@ -134,7 +136,7 @@ export const columns: ColumnDef<DataType>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Update</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => navigate("/admin-dashboard/agency/" + row.getValue("AgencyId"))}>Update</DropdownMenuItem>
             <DropdownMenuItem>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
