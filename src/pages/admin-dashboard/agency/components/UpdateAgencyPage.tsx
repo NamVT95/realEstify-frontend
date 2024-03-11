@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Form, Input } from 'antd';
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -28,29 +29,13 @@ type FieldType = {
 };
 export default function UpdateAgencyPage() {
     const [userData, setUserData] = useState<any>({
-        FullName: "",
+        Name: "",
         Email: "",
         PhoneNumber: "",
-        Address: "",
     })
     const { id } = useParams()
     const navigate = useNavigate()
 
-    //call api to get user data
-    useEffect(() => {
-        const fetchUserData = async () => {
-            //get user from redux
-            // const { data, error } = await getUserById(userId)
-            // if (error) {
-            //     console.log(error)
-            //     return
-            // }
-            // if (data != null) {
-            //     setUserData(data?.data)
-            // }
-        }
-        fetchUserData()
-    }, [])
 
     const onFinish = (values: FieldType) => {
         console.log('Success:', values);
@@ -76,10 +61,10 @@ export default function UpdateAgencyPage() {
     //call api to get user data
     useEffect(() => {
         const fetchUserData = () => {
-            axios.get("http://localhost:4000/api/customer")
+            axios.get("http://localhost:4000/api/agency/"+id)
                 .then(res => {
-                    console.log((res?.data?.data as any[]).filter(item => item.CustomerId == id)[0])
-                    setUserData((res?.data?.data as any[]).filter(item => item.CustomerId == id)[0])
+                    console.log((res?.data?.data as any[]))
+                    setUserData((res?.data?.data as any[]))
 
                 })
                 .catch(err => {
@@ -89,7 +74,36 @@ export default function UpdateAgencyPage() {
         fetchUserData()
     }, [])
 
-    console.log(userData)
+
+    const { register, handleSubmit, formState: { errors }, setValue} = useForm();
+    const onSubmit = (data:any) => {
+        console.log(data);
+
+        axios.put("http://localhost:4000/api/agency/" + id, {
+            UserId: userData?.UserId,
+            Name: data?.Name,
+            Email: data?.Email,
+            PhoneNumber: data?.PhoneNumber,
+        })
+        .then(res => {
+            toast.success("Update successfully")
+            navigate("/admin-dashboard/agency")
+        })
+        .catch(err => {
+            console.log(err)
+            toast.error("Update failed")
+        })
+
+    
+    };
+    
+    useEffect(() => {
+        setValue("Name", userData?.Name)
+        setValue("Email", userData?.Email)
+        setValue("PhoneNumber", userData?.PhoneNumber)
+    }, [userData])
+
+    console.log(errors);
 
     // CustomerId: 17,
     // UserId: 15,
@@ -101,79 +115,21 @@ export default function UpdateAgencyPage() {
         <div>
             <div className="bg-gray-100">
                 <h1 className="container text-2xl p-4 font-bold">
-                    Customer Information:  Id={userData?.CustomerId}
+                    Agency Information:  Id={userData?.CustomerId}
                 </h1>
                 <div className="container mx-auto py-8">
-                    <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
-                        <div className="col-span-4 sm:col-span-3">
-                            <div className="bg-white shadow rounded-lg p-6">
-                                <div className="flex flex-col items-center">
-                                    <img src={"https://avatar.iran.liara.run/public/boy?username=" + userData?.FullName || "Real"} className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0" />
-                                    <h1 className="text-xl font-bold">{userData?.FullName}</h1>
-                                    <p className="text-gray-700">{userData?.User?.Role}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-span-4 sm:col-span-9">
-                            <div className="bg-white shadow rounded-lg p-6">
-                                <h2 className="text-xl font-bold mb-4">General Information</h2>
-                                <div>
-                                    {userData?.FullName == "" ? (
-                                        <p>Loading...</p>
-                                    ) : (
-                                        <Form
-                                            name="basic"
-                                            layout="vertical"
-                                            initialValues={userData}
-                                            onFinish={onFinish}
-                                            onFinishFailed={onFinishFailed}
-                                            autoComplete="off"
+                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+                    <label className="text-sm font-semibold" htmlFor="Name">Name</label>
+      <input className="py-2 border rounded-sm px-2" type="text" placeholder="Name" {...register("Name", {})} />
+      <label className="text-sm font-semibold" htmlFor="Email">Email</label>
+      <input className="py-2 border rounded-sm px-2" type="email" placeholder="Email" {...register("Email", {})} />
+      <label className="text-sm font-semibold" htmlFor="PhoneNumber">PhoneNumber</label>
+      <input className="py-2 border rounded-sm px-2" type="text" placeholder="PhoneNumber" {...register("PhoneNumber", {})} />
 
-                                        >
-                                            <Form.Item<FieldType>
-                                                label="Full Name"
-                                                name="FullName"
-                                                rules={[{ required: true, message: 'Please input your username!' }]}
-                                            // initialValue={userData?.FullName}
-                                            >
-                                                <Input />
-                                            </Form.Item>
-
-                                            <Form.Item<FieldType>
-                                                label="Email"
-                                                name="Email"
-                                                rules={[{ required: true, message: 'Please input your username!' }]}
-                                            // initialValue={userData?.User?.Email}
-                                            >
-                                                <Input />
-                                            </Form.Item>
-
-                                            <Form.Item<FieldType>
-                                                label="Phone Number"
-                                                name="PhoneNumber"
-                                                rules={[{ required: true, message: 'Please input your username!' }]}
-                                            >
-                                                <Input />
-                                            </Form.Item>
-
-                                            <Form.Item<FieldType>
-                                                label="Address"
-                                                name="Address"
-                                                rules={[{ required: true, message: 'Please input your username!' }]}
-                                            >
-                                                <Input />
-                                            </Form.Item>
-
-
-                                            <Button type="submit">
-                                                Update
-                                            </Button>
-                                        </Form>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+      <Button type="submit">
+        Submit
+      </Button>
+    </form>
                 </div>
             </div>
             {/* <div className="bg-gray-100">

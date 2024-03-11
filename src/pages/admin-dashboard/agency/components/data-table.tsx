@@ -39,6 +39,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useNavigate } from "react-router-dom"
+import axios from "axios"
+import { toast } from "react-toastify"
 
 // AgencyId: 1,
 // UserId: 4,
@@ -137,7 +139,18 @@ export const columns: ColumnDef<DataType>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem onSelect={() => navigate("/admin-dashboard/agency/" + row.getValue("AgencyId"))}>Update</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => {
+
+              axios.delete(`http://localhost:4000/agency/${row.getValue("AgencyId")}`)
+              .then(response => {
+                toast.success('Agency deleted successfully')
+                window.location.reload()
+              })
+              .catch(error => {
+                toast.error('Agency deleted failed')
+              })
+
+            }} >Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
