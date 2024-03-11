@@ -221,7 +221,7 @@ export default function ProfilePage() {
                                         bookings.map((booking, index) => (
                                             <div key={index} className="flex justify-between items-center border-b py-4">
                                                 <div>
-                                                    <p>User ID: {booking.Customer.UserId}</p>
+                                                    <p>User ID: {booking?.Customer?.UserId}</p>
                                                     <p>Booking ID: {booking?.BookingId}</p>
                                                     <p>Booking Date: {format(new Date(booking?.BookingDate), "PPP")}</p>
                                                     <p className="flex items-center gap-2">Booking Status: <div className={cn("py-1 px-2 rounded-full", booking?.Status == "Approved" ? "bg-green-200 text-green-600" : "bg-slate-200 text-slate-600")}>{booking?.Status}</div></p>
