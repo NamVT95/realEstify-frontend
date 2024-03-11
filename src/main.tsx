@@ -30,6 +30,7 @@ import CreateCustomerPage from './pages/admin-dashboard/customer/page/CreateCust
 import UpdateCustomerPage from './pages/admin-dashboard/customer/page/UpdateCustomerPage.tsx';
 import ViewBookingCustomer from './pages/admin-dashboard/customer/page/ViewBookingCustomer.tsx';
 import SelectPropertyForBooking from './pages/dashboard/booking/selectPropertyTable/page.tsx';
+import ViewPayment from './pages/admin-dashboard/customer/page/ViewPayment.tsx';
 
 const router = createBrowserRouter([
   {
@@ -103,6 +104,10 @@ const router = createBrowserRouter([
       {
         path: "customer/:id/booking",
         element: <ViewBookingCustomer />,
+      },
+      {
+        path: "customer/:id/booking/:bookingId/payment",
+        element: <ViewPayment />,
       },
       {
         path: "booking",

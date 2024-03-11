@@ -1,11 +1,10 @@
 "use client"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
-import { Booking } from "../data/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
-import { Badge } from "@/components/ui/badge"
+import { Booking } from "../../booking/data/schema"
 
 export const columns: ColumnDef<Booking>[] = [
   // {
@@ -30,11 +29,11 @@ export const columns: ColumnDef<Booking>[] = [
   //   enableHiding: false,
   // },
   {
-    accessorKey: "id",
+    accessorKey: "BookingId",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Id" />
+      <DataTableColumnHeader column={column} title="BookingId" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+    cell: ({ row }) => <div className="w-[80px]">{row.getValue("BookingId")}</div>,
     enableSorting: false,
     enableHiding: false,
   },
@@ -60,12 +59,7 @@ export const columns: ColumnDef<Booking>[] = [
           {/* {label && <Badge variant="outline">{label.label}</Badge>} */}
           <span className="max-w-[500px] truncate font-medium">
             <div className="flex gap-2 items-center">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={(row.getValue("CustomerId") as any).avatarUrl} alt={(row.getValue("CustomerId"))} />
-              <AvatarFallback>{(row.getValue("CustomerId") as any)}</AvatarFallback>
-            </Avatar>
-            {/* {(row.getValue("CustomerId") as Booking["CustomerId"])}  */}
-            UserName
+            {(row.getValue("CustomerId") as Booking["CustomerId"])} 
             </div>
           </span>
         </div>

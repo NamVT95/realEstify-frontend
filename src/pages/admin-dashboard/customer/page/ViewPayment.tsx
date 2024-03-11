@@ -4,7 +4,7 @@ import { DataTable } from './components/data-table'
 import { useParams } from 'react-router-dom'
 import { columns } from './components/columns'
 
-export default function ViewBookingCustomer() {
+export default function ViewPayment() {
     const [booking, setBooking] = React.useState([])
     const {id} = useParams()
     console.log(id)
@@ -25,8 +25,8 @@ export default function ViewBookingCustomer() {
 
 
   return (
-    <div><h1>
-        View Booking Customer
+    <div><h1 className='font-bold text-2xl'>
+        View Payment
         </h1>
 
         <div className='mt-4'>
