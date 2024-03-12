@@ -40,7 +40,7 @@ export default function Header() {
                 <PopoverContent>
                   <div className="flex flex-col gap-2">
                     <Link to={"/profile"}>Profile</Link>
-                    <Link to={"/settings"}>Settings</Link>
+                    <Link to={"/booking-history"}>Booking History</Link>
                     <Button type="button" onClick={() => {
                       dispatch(logout());
                     }}>Logout</Button>

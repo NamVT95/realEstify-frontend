@@ -32,6 +32,8 @@ import { store } from './store/store.ts';
 import CreateCustomerPage from './pages/admin-dashboard/customer/page/CreateCustomerPage.tsx';
 import CreateAgencyPage from './pages/admin-dashboard/agency/components/CreateAgencyPage.tsx';
 import UpdateAgencyPage from './pages/admin-dashboard/agency/components/UpdateAgencyPage.tsx';
+import ViewProfilePage from './pages/profile/viewProfile.tsx';
+import BookingHistory from './pages/profile/BookingHistory.tsx';
 
 const router = createBrowserRouter([
   {
@@ -52,7 +54,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/profile",
+    element: <ViewProfilePage />,
+  },
+  {
+    path: "/profile/update",
     element: <ProfilePage />,
+  },
+  {
+    path: "/booking-history",
+    element: <BookingHistory />,
   },
   {
     path: "/dashboard",
