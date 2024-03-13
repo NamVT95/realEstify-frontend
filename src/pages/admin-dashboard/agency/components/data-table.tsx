@@ -41,6 +41,7 @@ import {
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import { toast } from "react-toastify"
+import { Badge } from "antd"
 
 // AgencyId: 1,
 // UserId: 4,
@@ -107,6 +108,21 @@ export const columns: ColumnDef<DataType>[] = [
     cell: ({ row }) => <div className="lowercase">{row.getValue("Email")}</div>,
   },
   {
+    accessorKey: "Status",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Status
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => <Badge className="lowercase bg-slate-800 text-white rounded-full py-1 px-2">{row.getValue("Status")}</Badge>,
+  },
+  {
     accessorKey: "PhoneNumber",
     header: ({ column }) => {
       return (
@@ -141,7 +157,7 @@ export const columns: ColumnDef<DataType>[] = [
             <DropdownMenuItem onSelect={() => navigate("/admin-dashboard/agency/" + row.getValue("AgencyId"))}>Update</DropdownMenuItem>
             <DropdownMenuItem onSelect={() => {
 
-              axios.delete(`http://localhost:4000/agency/${row.getValue("AgencyId")}`)
+              axios.delete(`http://localhost:4000/api/agency/${row.getValue("AgencyId")}`)
               .then(response => {
                 toast.success('Agency deleted successfully')
                 window.location.reload()

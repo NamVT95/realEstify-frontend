@@ -147,7 +147,7 @@ export default function ProfilePage() {
                                         name="email"
                                         rules={[{ required: true, message: 'Please input your username!' }]}
                                         >
-                                        <Input />
+                                        <Input disabled/>
                                     </Form.Item>
 
                                     <Form.Item<FieldType>
@@ -155,7 +155,7 @@ export default function ProfilePage() {
                                         name="phoneNumber"
                                         rules={[{ required: true, message: 'Please input your username!' }]}
                                         >
-                                        <Input />
+                                        <Input disabled/>
                                     </Form.Item>
 
                                     <Form.Item<FieldType>
@@ -163,13 +163,8 @@ export default function ProfilePage() {
                                         name="address"
                                         rules={[{ required: true, message: 'Please input your username!' }]}
                                         >
-                                        <Input />
+                                        <Input disabled/>
                                     </Form.Item>
-
-
-                                    <Button type="submit">
-                                        Update
-                                    </Button>
                                 </Form>
                             </div>
                         </div>

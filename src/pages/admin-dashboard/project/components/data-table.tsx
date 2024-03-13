@@ -41,6 +41,7 @@ import {
 import { useAppDispatch } from "@/hooks/useStore"
 import { openUpdateForm } from "@/store/project/updateProjectSlice"
 import { Link } from "react-router-dom"
+import { format } from "date-fns"
 
 // {
 //   ProjectId: 3,
@@ -161,7 +162,7 @@ export const columns: ColumnDef<DataType>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("StartDate")}</div>,
+    cell: ({ row }) => <div className="lowercase">{format(new Date(row.getValue("StartDate")),"PPP")}</div>,
   },
   {
     accessorKey: "EndDate",

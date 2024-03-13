@@ -1,8 +1,4 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import { Button, buttonVariants } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -12,14 +8,14 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { cn } from "@/lib/utils"
-import { CalendarIcon, ChevronDownIcon, Loader2Icon } from "lucide-react"
-import { ChangeEvent, useState } from "react"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { format } from "date-fns"
 import { register } from "@/lib/api/register"
-import { toast } from "react-toastify"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Loader2Icon } from "lucide-react"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
+import * as z from "zod"
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
