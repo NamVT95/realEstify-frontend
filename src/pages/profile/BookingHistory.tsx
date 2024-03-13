@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { updateInfo } from "@/store/auth/loginUserSlice";
 import { Form, Input } from 'antd';
 import axios from "axios";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -93,8 +93,9 @@ export default function BookingHistory() {
         const fetchUserData = () => {
             axios.get("http://localhost:4000/api/booking")
                 .then(res => {
-                    console.log((res?.data?.data as any[]).filter(item => item.Customer.UserId = user?.id))
-                    setBookings((res?.data?.data as any[]).filter(item => item.Customer.UserId = user?.id))
+                    console.log(user?.id)
+                    console.log((res?.data?.data as any[]).filter(item => item.Customer.UserId == user?.id))
+                    setBookings((res?.data?.data as any[]).filter(item => item.Customer.UserId == user?.id))
 
                 })
                 .catch(err => {
@@ -106,26 +107,43 @@ export default function BookingHistory() {
 
     const currentUser = useAppSelector(state => state.loginUser.user)
 
-    const [payments, setPayments] = useState([
-        {
-            "PaymentProcessDetailsId": 4,
-            "PaymentProcessId": 2,
-            "PaymentDate": null,
-            "Time": 1,
-            "Amount": 0.4,
-            "Status": "Not Yet Paid",
-            "Description": "Không có ghi chú"
-        },
-        {
-            "PaymentProcessDetailsId": 5,
-            "PaymentProcessId": 2,
-            "PaymentDate": null,
-            "Time": 2,
-            "Amount": 0.4,
-            "Status": "Not Yet Paid",
-            "Description": "Không có ghi chú"
-        }
-    ])
+    const [message, setMessage] = useState<string>("Bấm vào nút View Payment để xem")
+
+    const [payments, setPayments] = useState<any[]>([])
+    // const [payments, setPayments] = useState([
+    //     {
+    //         "PaymentProcessDetailsId": 4,
+    //         "PaymentProcessId": 2,
+    //         "PaymentDate": null,
+    //         "Time": 1,
+    //         "Amount": 0.4,
+    //         "Status": "Not Yet Paid",
+    //         "Description": "Không có ghi chú"
+    //     },
+    //     {
+    //         "PaymentProcessDetailsId": 5,
+    //         "PaymentProcessId": 2,
+    //         "PaymentDate": null,
+    //         "Time": 2,
+    //         "Amount": 0.4,
+    //         "Status": "Not Yet Paid",
+    //         "Description": "Không có ghi chú"
+    //     }
+    // ])
+
+    const handleClickPayment = (bookingId: number) => {
+        axios.get("http://localhost:4000/api/customer/debt/" + bookingId)
+            .then(res => {
+                console.log(res)
+                setPayments(res?.data?.data)
+            })
+            .catch(err => {
+                console.log(err)
+                setPayments([])
+                setMessage("Không có đợt trả góp của booking có id: " + bookingId)
+                toast.info("Không có đợt trả góp của booking có id: " + bookingId)
+            })
+    }
 
     return (
         <div>
@@ -153,12 +171,15 @@ export default function BookingHistory() {
                                                     <p>Project Name: {booking?.Project?.Name}</p>
                                                     <p>Amount Deposit: {formatPrice(booking?.AmountDeposit)}</p>
                                                 </div>
-                                                <div>
+                                                <div className="flex flex-col gap-2 justify-stretch items-stretch">
                                                     <Link to={"/detail/" + booking?.Project?.ProjectId}>
                                                         <Button>
                                                             View Project
                                                         </Button>
                                                     </Link>
+                                                    <Button onClick={() => handleClickPayment(booking?.BookingId)}>
+                                                        View Payment
+                                                    </Button>
                                                 </div>
                                             </div>
                                         ))
@@ -175,7 +196,9 @@ export default function BookingHistory() {
                         <div className='grid gap-4 grid-cols-1'>
                             {
                                 payments?.length == 0 || payments == null ? (
-                                    <div>Không có dữ liệu</div>
+                                    <Card className="w-full h-[200px] flex items-center justify-center">
+                                        <p>{message}</p>
+                                    </Card>
                                 ) : (
                                     <>
                                         {

@@ -11,7 +11,7 @@ import { Form, Input } from 'antd';
 import axios from "axios";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 
@@ -41,6 +41,7 @@ export default function ProfilePage() {
 
     const [bookings, setBookings] = useState<any[]>([])
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
 
     console.log(user)
 
@@ -81,6 +82,9 @@ export default function ProfilePage() {
                         Address: values.address,
                     }
                 }))
+                setTimeout(() => {
+                    navigate("/profile")
+                }, 1000)
             })
             .catch(err => {
                 console.log(err)
