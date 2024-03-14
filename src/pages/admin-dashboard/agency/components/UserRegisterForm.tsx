@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { register } from "@/lib/api/register"
 import { zodResolver } from "@hookform/resolvers/zod"
+import axios from "axios"
 import { Loader2Icon } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -22,7 +23,7 @@ const phoneRegex = new RegExp(
 );
 
 const formSignUpSchema = z.object({
-  fullname: z.string()
+  name: z.string()
     .min(3, { message: 'Name must be at least 3 characters.' })
     .max(30, { message: 'Name must be max 30 characters' }),
   username: z.string()
@@ -32,18 +33,13 @@ const formSignUpSchema = z.object({
   phoneNumber: z.string().regex(phoneRegex, {
     message: "Please enter a valid phone number",
   }),
-  address: z.string(),
   newPassword: z.string({
     required_error: "New Password is required",
   })
     .min(3, { message: 'New Password must be at least 6 characters.' })
     .max(30, { message: 'New Password must be max 30 characters' }),
-  confirmNewPassword: z.string({}),
 })
-  .refine((data) => data.newPassword === data.confirmNewPassword, {
-    message: "Oops! Password does not match",
-    path: ["confirmNewPassword"],
-  })
+
 
 export type SignUpFormValues = z.infer<typeof formSignUpSchema>
 
@@ -54,11 +50,9 @@ export default function UserRegisterForm() {
   const defaultValues: Partial<SignUpFormValues> = {
     username: "",
     email: "",
-    fullname: "",
     phoneNumber: "",
-    address: "",
+    name: "",
     newPassword: "",
-    confirmNewPassword: "",
   }
 
   const form = useForm<SignUpFormValues>({
@@ -70,22 +64,27 @@ export default function UserRegisterForm() {
   async function onSubmit(values: SignUpFormValues) {
     setIsLoading(true)
     const handleRegister = async () => {
-      const data = await register({
-        username: values.username,
-        password: values.newPassword,
-        fullname: values.fullname,
-        phone: values.phoneNumber,
-        address: values.address,
-        email: values.email,
+      axios.post("http://localhost:4000/api/agency", {
+        Username: values.username,
+        Password: values.newPassword,
+        Name: values.name,
+        Email: values.email,
+        PhoneNumber: values.phoneNumber,
       })
-      if (data) {
-        toast.success("Account created successfully")
-        setIsLoading(false)
-        navigate("/admin-dashboard/customer")
-      } else {
+      .then(res => {
+        if (res.data) {
+          toast.success("Agency created successfully")
+          setIsLoading(false)
+          navigate("/admin-dashboard/agency")
+        } else {
+          toast.error("Failed to create account")
+          setIsLoading(false)
+        }
+      })
+      .catch(error => {
         toast.error("Failed to create account")
         setIsLoading(false)
-      }
+      })
     }
     handleRegister()
   }
@@ -109,12 +108,12 @@ export default function UserRegisterForm() {
           />
           <FormField
             control={form.control}
-            name="fullname"
+            name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Full Name</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Your Full Name" {...field} />
+                  <Input placeholder="Your Name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -149,21 +148,6 @@ export default function UserRegisterForm() {
             )}
           />
         </div>
-        <div>
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Address</FormLabel>
-                <FormControl>
-                  <Input placeholder="Your Address" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 justify-items-stretch">
           <FormField
             control={form.control}
@@ -178,25 +162,12 @@ export default function UserRegisterForm() {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="confirmNewPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
-                <FormControl>
-                  <Input type="password" placeholder="Confirm Password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
         </div>
         <Button disabled={isLoading} type="submit" className="w-full hover:shadow-primary-md">
           {isLoading && (
             <Loader2Icon className="animate-spin" />
           )}
-          Sign Up
+          Create Agency
         </Button>
       </form>
     </Form>

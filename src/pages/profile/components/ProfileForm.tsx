@@ -86,7 +86,6 @@ export default function ProfilePage() {
             .then(res => {
                 console.log((res?.data?.data as any[]).filter(item => item.CustomerId = user?.id))
                 setBookings((res?.data?.data as any[]).filter(item => item.CustomerId = user?.id))
-            
             })
             .catch(err => {
                 console.log(err)
