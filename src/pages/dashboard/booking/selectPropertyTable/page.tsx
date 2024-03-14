@@ -52,10 +52,12 @@ export default function SelectPropertyForBooking() {
         try {
             const res = await axiosClient.post(`/api/agency/opening-for-sales-detail`, submitData);
             console.log(res)
-            toast.success("Success")
+            toast.success(res.data.message)
         } catch (error) {
-            handleApiError(error);
-            toast.success("Success")
+            console.log(error)
+            if (error?.response?.data?.message) {
+                toast.error(error?.response?.data?.message)
+            }
         }
     }
     return (
