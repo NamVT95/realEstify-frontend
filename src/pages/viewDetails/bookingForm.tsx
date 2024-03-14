@@ -40,26 +40,28 @@ function BookingForm({ projectId }: BookingFormProps) {
     const reduxToken = useAppSelector((state) => state.loginUser.token);
     const [agencies, setAgencies] = React.useState([])
     const [customerId, setCustomerId] = React.useState(16)
+    const [selectedAgency, setSelectedAgency] = React.useState(1)
     useEffect(() => {
         axios.get("http://localhost:4000/api/agency")
-        .then(res => {
-            setAgencies(res?.data?.data)
-        })
-        .catch(err => {
-            console.log(err)
-        }
-        )
+            .then(res => {
+                console.log(res?.data?.data)
+                setAgencies(res?.data?.data)
+            })
+            .catch(err => {
+                console.log(err)
+            }
+            )
 
         axios.get("http://localhost:4000/api/customer")
-        .then(res => {
-            console.log(res?.data?.data)
-            console.log(res?.data?.data?.filter((data: any) => data.UserId == user?.id)[0]?.CustomerId)
-            setCustomerId(res?.data?.data?.filter((data: any) => data.UserId == user?.id)[0]?.CustomerId)
-        })
-        .catch(err => {
-            console.log(err)
-        }
-        )
+            .then(res => {
+                console.log(res?.data?.data)
+                console.log(res?.data?.data?.filter((data: any) => data.UserId == user?.id)[0]?.CustomerId)
+                setCustomerId(res?.data?.data?.filter((data: any) => data.UserId == user?.id)[0]?.CustomerId)
+            })
+            .catch(err => {
+                console.log(err)
+            }
+            )
     }, [])
 
     const formik = useFormik({
@@ -82,11 +84,8 @@ function BookingForm({ projectId }: BookingFormProps) {
                 const bookingData = {
                     projectId: projectId,
                     customerId: user ? customerId || 0 : 0,
-                    agencyId: formik.values.agency,
-                    name: values.name,
+                    agencyId: selectedAgency,
                     selectionMethod: formik.values.selectionMethod,
-                    email: values.email,
-                    phone: values.phone,
                     AmountDeposit: formik.values.deposit,
                 };
                 console.log(bookingData);
@@ -116,7 +115,6 @@ function BookingForm({ projectId }: BookingFormProps) {
         }
     }
 
-    console.log(agencies)
 
     return (
         <form onSubmit={formik.handleSubmit} className="container my-10 space-y-4 col-span-1">
@@ -190,20 +188,20 @@ function BookingForm({ projectId }: BookingFormProps) {
                         style={{ display: "block" }}
                     >
                         <option value="VNPay" label="VNPay">
-                        {" "}
-                        VNPay
+                            {" "}
+                            VNPay
                         </option>
                         <option value="Momo" label="Momo">
-                        Momo
+                            Momo
                         </option>
                         <option value="ZaloPay" label="ZaloPay">
-                        ZaloPay
+                            ZaloPay
                         </option>
                         <option value="Bank" label="Bank">
-                        Bank
+                            Bank
                         </option>
                         <option value="Cash" label="Cash">
-                        Cash
+                            Cash
                         </option>
                     </select>
                     {/* <Select 
@@ -246,8 +244,10 @@ function BookingForm({ projectId }: BookingFormProps) {
                     </label>
                     <select
                         name="agency"
-                        value={formik.values.agency.toString()}
-                        onChange={formik.handleChange}
+                        value={selectedAgency}
+                        onChange={(e) => {
+                            setSelectedAgency(parseInt(e.target.value))
+                        }}
                         onBlur={formik.handleBlur}
                         style={{ display: "block" }}
                     >

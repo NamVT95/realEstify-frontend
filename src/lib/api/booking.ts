@@ -4,9 +4,6 @@ interface BookingBody {
   projectId: number;
   customerId: number;
   agencyId: number;
-  name: string;
-  email: string;
-  phone: string;
   selectionMethod: string;
   AmountDeposit: number;
 }

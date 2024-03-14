@@ -19,20 +19,20 @@ export default function BookingManagement() {
   const [rejectedData, setRejectedData] = useState([])
   const { trigger } = useAppSelector((state) => state.trigger)
   const dispatch = useAppDispatch()
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
 
   useEffect(() => {
     const handleGetPeddingBooking = async () => {
       try {
-        const res = await getPeddingBooking()
-        console.log(res.response.data)
-        setData(res.response.data)
+        const res = await getPeddingBooking(user.id || 0)
+        setData(res)
       } catch (error) {
         console.log(error)
       }
     }
     const handleGetApprovedBooking = async () => {
       try {
-        const res = await getApproveBooking()
+        const res = await getApproveBooking(user.id || 0)
         setApprovedData(res || [])
       } catch (error) {
         console.log(error)
@@ -40,7 +40,7 @@ export default function BookingManagement() {
     }
     const handleGetIsSelectedBooking = async () => {
       try {
-        const res = await getApproveBooking()
+        const res = await getApproveBooking(user.id || 0)
         setOpeningForSales(res || [])
       } catch (error) {
         console.log(error)
@@ -49,7 +49,7 @@ export default function BookingManagement() {
 
     const handleGetRejectedBooking = async () => {
       try {
-        const res = await getRejectedBooking()
+        const res = await getRejectedBooking(user.id || 0)
         setRejectedData(res || [])
       } catch (error) {
         console.log(error)
@@ -59,7 +59,7 @@ export default function BookingManagement() {
     handleGetPeddingBooking()
     handleGetApprovedBooking()
     handleGetIsSelectedBooking()
-  }, [trigger])
+  }, [trigger, user.id])
 
   return (
     <div className='flex flex-col gap-8'>
