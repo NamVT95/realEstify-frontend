@@ -82,7 +82,6 @@ export default function SelectPropertyForBooking() {
                 <div className="flex gap-2 items-center" >
                     <div>Installment</div>
                     <Select
-                        defaultValue={"3"}
                         style={{ width: 120 }}
                         onChange={handleChangeInstallment}
                         options={
