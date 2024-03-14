@@ -187,19 +187,6 @@ function BookingForm({ projectId }: BookingFormProps) {
                         onBlur={formik.handleBlur}
                         style={{ display: "block" }}
                     >
-                        <option value="VNPay" label="VNPay">
-                            {" "}
-                            VNPay
-                        </option>
-                        <option value="Momo" label="Momo">
-                            Momo
-                        </option>
-                        <option value="ZaloPay" label="ZaloPay">
-                            ZaloPay
-                        </option>
-                        <option value="Bank" label="Bank">
-                            Bank
-                        </option>
                         <option value="Cash" label="Cash">
                             Cash
                         </option>

@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import { Badge } from "antd";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
+import { formatPrice } from "@/lib/formatting";
 
 export default function ViewPayment() {
   const [booking, setBooking] = React.useState([]);
@@ -99,7 +100,7 @@ export default function ViewPayment() {
                           </div>
 
                           <div className="font-bold">
-                            Số tiền: {payment.Amount} tỷ
+                            Số tiền: {formatPrice(payment?.Amount)}
                           </div>
                           <div className="font-bold">
                             Hạn trả:{" "}

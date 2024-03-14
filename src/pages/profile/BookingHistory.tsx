@@ -211,7 +211,7 @@ export default function BookingHistory() {
                                                                 <div className='flex flex-col justify-between'>
                                                                     <div className='font-bold flex gap-2'>Payment Id: {payment.PaymentProcessDetailsId} - <div className='font-bold'>Lần thứ: {payment.Time}</div></div>
 
-                                                                    <div className='font-bold'>Số tiền: {payment.Amount} tỷ</div>
+                                                                    <div className='font-bold'>Số tiền: {formatPrice(payment.Amount)}</div>
                                                                     <div className='font-bold'>
                                                                         Hạn trả: {
                                                                             payment.PaymentDate != null ?

@@ -40,7 +40,12 @@ export default function PropertyList() {
                                     {propertiy.Type}
                                 </div>
                                 <div>
-                                    Price: {propertiy.Price}B
+                                    Price: {
+                                        new Intl.NumberFormat('vi-VN', {
+                                            style: 'currency',
+                                            currency: 'VND'
+                                        }).format(propertiy.Price)
+                                    }
                                 </div>
                             </div>
                             <Separator orientation="vertical" />
