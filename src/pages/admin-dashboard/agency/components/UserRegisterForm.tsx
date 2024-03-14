@@ -82,7 +82,7 @@ export default function UserRegisterForm() {
         }
       })
       .catch(error => {
-        toast.error("Failed to create account")
+        toast.error("Failed to create account: "+ error?.response?.data?.message)
         setIsLoading(false)
       })
     }
