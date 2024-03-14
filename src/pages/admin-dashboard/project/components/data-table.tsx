@@ -41,6 +41,9 @@ import {
 import { useAppDispatch } from "@/hooks/useStore"
 import { openUpdateForm } from "@/store/project/updateProjectSlice"
 import { Link } from "react-router-dom"
+import axios from "axios"
+import { axiosClient } from "@/lib/api/config/axiosClient"
+import DateColumn from "./date-column"
 
 // {
 //   ProjectId: 3,
@@ -161,7 +164,7 @@ export const columns: ColumnDef<DataType>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("StartDate")}</div>,
+    cell: ({ row }) => <DateColumn row={row} type="start" />,
   },
   {
     accessorKey: "EndDate",
@@ -176,7 +179,7 @@ export const columns: ColumnDef<DataType>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("EndDate")}</div>,
+    cell: ({ row }) => <DateColumn row={row} type="end" />,
   },
   {
     id: "actions",

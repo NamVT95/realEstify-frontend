@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
+import { switchTrigger } from '@/store/renderTrigger';
 
 export default function UpdateProjectForm() {
     const dispatch = useAppDispatch();
@@ -63,6 +64,7 @@ export default function UpdateProjectForm() {
                 dispatch(closeUpdateForm())
             }, 500);
         }
+        dispatch(switchTrigger())
     }
 
     return (

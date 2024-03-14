@@ -4,18 +4,20 @@ import axios from 'axios'
 import { Button } from 'antd'
 import UpdateDialog from './components/updateDialog'
 import { useNavigate } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '@/hooks/useStore'
 
 
 export default function Project() {
   const navigate = useNavigate()
   const [Project, setProject] = React.useState([])
+  const trigger = useAppSelector((state) => state.trigger.trigger)
   useEffect(() => {
     axios.get("http://localhost:4000/api/project")
       .then(res => {
         setProject(res?.data?.response?.data || [])
         console.log(res?.data?.response?.data)
       })
-  }, [])
+  }, [trigger])
 
 
   return (
