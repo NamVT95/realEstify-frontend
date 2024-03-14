@@ -44,6 +44,7 @@ import { Link } from "react-router-dom"
 import axios from "axios"
 import { axiosClient } from "@/lib/api/config/axiosClient"
 import DateColumn from "./date-column"
+import { format } from "date-fns"
 
 // {
 //   ProjectId: 3,
@@ -164,7 +165,9 @@ export const columns: ColumnDef<DataType>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <DateColumn row={row} type="start" />,
+    cell: ({ row }) => (
+      format(new Date(row.getValue("StartDate")), "PPP")
+      ),
   },
   {
     accessorKey: "EndDate",
@@ -179,7 +182,9 @@ export const columns: ColumnDef<DataType>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <DateColumn row={row} type="end" />,
+    cell: ({ row }) => (
+      format(new Date(row.getValue("EndDate")), "PPP")
+    ),
   },
   {
     id: "actions",

@@ -67,7 +67,13 @@ export default function CreateProjectPage() {
           <input type="number" placeholder="ConstructionDensity" {...register("ConstructionDensity", {})} className='py-2 px-4'/>
           <label htmlFor="Status">Status</label>
           <input type="text" placeholder="Status" {...register("Status", {})} className='py-2 px-4'/>
+          <label htmlFor="Status">StartDate</label>
+          <input type="date" placeholder="StartDate" {...register("StartDate", {})} className='py-2 px-4'/>
+          <label htmlFor="Status">EndDate</label>
+        <input type="date" placeholder="EndDate" {...register("EndDate", {})} className='py-2 px-4'/>
+
         </div>
+        
       </div>
       <Button type='submit'>Submit</Button>
     </form>
