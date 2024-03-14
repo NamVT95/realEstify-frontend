@@ -42,14 +42,7 @@ export default function ViewPayment() {
         })
         .catch(err => {
             console.log(err)
-            setPayments([{
-                PaymentProcessDetailsId: 1,
-                Time: 1,
-                Amount: 1000000,
-                PaymentDate: "2022-12-12",
-                Status: "Chưa trả",
-                Description: "Chưa trả"
-            }])
+            setPayments([])
             setMessage("Không có đợt trả góp của booking có id: " + bookingId)
         })
     }, []);

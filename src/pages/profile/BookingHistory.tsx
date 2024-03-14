@@ -135,7 +135,7 @@ export default function BookingHistory() {
         axios.get("http://localhost:4000/api/customer/debt/" + bookingId)
             .then(res => {
                 console.log(res)
-                setPayments(res?.data?.data)
+                setPayments(res?.data?.response?.data)
             })
             .catch(err => {
                 console.log(err)
