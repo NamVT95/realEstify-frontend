@@ -69,7 +69,7 @@ function BookingForm({ projectId }: BookingFormProps) {
             name: user ? user.FullName || '' : '',
             email: user ? user.Email || '' : '',
             phone: user ? user.PhoneNumber || '' : '',
-            selectionMethod: 'VNPay',
+            selectionMethod: 'Cash',
             deposit: 10000000,
             agency: 1,
         },
