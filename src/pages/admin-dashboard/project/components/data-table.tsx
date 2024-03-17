@@ -1,6 +1,3 @@
-"use client"
-
-import * as React from "react"
 import {
   CaretSortIcon,
   ChevronDownIcon,
@@ -18,6 +15,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
+import * as React from "react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -26,8 +24,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import {
@@ -40,11 +37,8 @@ import {
 } from "@/components/ui/table"
 import { useAppDispatch } from "@/hooks/useStore"
 import { openUpdateForm } from "@/store/project/updateProjectSlice"
-import { Link } from "react-router-dom"
-import axios from "axios"
-import { axiosClient } from "@/lib/api/config/axiosClient"
-import DateColumn from "./date-column"
 import { format } from "date-fns"
+import { Link } from "react-router-dom"
 
 // {
 //   ProjectId: 3,
@@ -203,6 +197,7 @@ export const columns: ColumnDef<DataType>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem><Link to={`/admin-dashboard/project/${row.getValue("ProjectId")}`}>View Details</Link></DropdownMenuItem>
+            <DropdownMenuItem><Link to={`/admin-dashboard/project/${row.getValue("ProjectId")}/payment-method`}>View Payment Method</Link></DropdownMenuItem>
             <DropdownMenuItem>Update</DropdownMenuItem>
             <DropdownMenuItem>Delete</DropdownMenuItem>
             <DropdownMenuItem onClick={() => {

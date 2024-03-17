@@ -13,6 +13,7 @@ import { format, set } from "date-fns";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import PaymentHistory from "./PaymentHistory";
 
 
 
@@ -160,6 +161,7 @@ export default function BookingHistory() {
                                 <div>
                                     {
                                         bookings.map((booking, index) => (
+                                            <>
                                             <div key={index} className="flex justify-between items-center border-b py-4">
                                                 <div>
                                                     <p>User ID: {booking?.Customer?.UserId}</p>
@@ -182,8 +184,11 @@ export default function BookingHistory() {
                                                     </Button>
                                                 </div>
                                             </div>
+                                            <PaymentHistory bookingId={booking?.BookingId} projectId={booking?.Project?.ProjectId}/>
+                                            </>
                                         ))
                                     }
+
                                 </div>
                             ) : (
                                 <div>
@@ -193,48 +198,7 @@ export default function BookingHistory() {
                         }
                     </div>
                     <div className="col-span-1">
-                        <div className='grid gap-4 grid-cols-1'>
-                            {
-                                payments?.length == 0 || payments == null ? (
-                                    <Card className="w-full h-[200px] flex items-center justify-center">
-                                        <p>{message}</p>
-                                    </Card>
-                                ) : (
-                                    <>
-                                        {
-                                            payments.map((payment: any) => {
-
-                                                return (
-                                                    <Card >
-                                                        <CardHeader>
-                                                            <div className='flex justify-between gap-4'>
-                                                                <div className='flex flex-col justify-between'>
-                                                                    <div className='font-bold flex gap-2'>Payment Id: {payment.PaymentProcessDetailsId} - <div className='font-bold'>Lần thứ: {payment.Time}</div></div>
-
-                                                                    <div className='font-bold'>Số tiền: {formatPrice(payment.Amount)}</div>
-                                                                    <div className='font-bold'>
-                                                                        Hạn trả: {
-                                                                            payment.PaymentDate != null ?
-                                                                                format(new Date(payment.PaymentDate), "dd/MM/yyyy")
-                                                                                : (null)
-                                                                        }
-                                                                    </div>
-                                                                </div>
-                                                                <div className='flex gap-4 flex-col'>
-                                                                    <Badge className='p-2 rounded-full bg-primary text-white font-semibold'>{payment.Status}</Badge>
-
-                                                                </div>
-                                                            </div>
-                                                            <div className='font-bold'>Description: {payment.Description}</div>
-                                                        </CardHeader>
-                                                    </Card>
-                                                )
-                                            })
-                                        }
-                                    </>
-                                )
-                            }
-                        </div>
+                        
                     </div>
                 </div>
 

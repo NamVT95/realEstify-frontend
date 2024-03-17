@@ -1,9 +1,11 @@
 import { axiosClient, handleApiError } from "@/lib/api/config/axiosClient"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { Select, Space } from 'antd';
 import { Button } from "@/components/ui/button"
 import { toast } from "react-toastify"
+import axios from "axios";
+import { convertPaymentMethod } from "@/pages/admin-dashboard/project/PaymentMethodPage";
 
 export default function SelectPropertyForBooking() {
     const param = useParams()
@@ -14,9 +16,8 @@ export default function SelectPropertyForBooking() {
     const [selectedInstallment, setSelectedInstallment] = useState<any>(null)
     const [openingForSalesId, setOpeningForSalesId] = useState<any>(null)
 
-    const installmentPayment = [
-        3, 6, 9
-    ]
+    const [paymentMethods, setPaymentMethods] = useState<any>([])
+
 
     useEffect(() => {
         const getBookingById = async (id: number) => {
@@ -27,13 +28,19 @@ export default function SelectPropertyForBooking() {
                 setProperties(res?.data?.data)
                 const res2 = await axiosClient.get(`/api/openingForSales/${data?.response?.data?.Project?.ProjectId}`);
                 setOpeningForSalesId(res2?.data?.data[0]?.OpeningForSalesId)
+
+                const res3 = await axiosClient.get(`/api/investor/payment-options/${data?.response?.data?.Project?.ProjectId}`);
+                setPaymentMethods(convertPaymentMethod(res3.data?.data))
+                console.log(convertPaymentMethod(res3.data?.data))
             } catch (error) {
-                handleApiError(error);
+                console.log(error)
             }
         };
 
         getBookingById(id)
     }, [id])
+
+
     const handleChangeProperty = (value: string) => {
         setSelectedProperty(value)
     };
@@ -47,7 +54,7 @@ export default function SelectPropertyForBooking() {
             PropertyId: Number(selectedProperty),
             BookingId: Number(id),
             AgencyId: Number(booking?.Agency?.AgencyId),
-            NumberInstallments: Number(selectedInstallment)
+            PaymentMethod: Number(selectedInstallment)
         }
         try {
             const res = await axiosClient.post(`/api/agency/opening-for-sales-detail`, submitData);
@@ -85,10 +92,11 @@ export default function SelectPropertyForBooking() {
                         style={{ width: 120 }}
                         onChange={handleChangeInstallment}
                         options={
-                            installmentPayment.map((installment: any) => {
+                            paymentMethods.map((pm: any) => {
+                                console.log(pm)
                                 return {
-                                    label: `${installment} months`,
-                                    value: installment
+                                    label: `${pm?.PaymentMethodId} - ${pm?.details?.length} đợt`,
+                                    value: +pm?.PaymentMethodId
                                 }
                             })
                         }
@@ -101,6 +109,63 @@ export default function SelectPropertyForBooking() {
             }}>
                 Save
             </Button>
+            {/* 
+            {
+                PayMethodId: "1",
+                details: [
+                    {
+                        PaymentOptionId: "1",
+                        Batch: "1",
+                        Percentage: "10",
+                        Date: "2021-10-10",
+                        Note: "note"
+                    },
+                    {
+                        PaymentOptionId: "2",
+                        Batch: "2",
+                        Percentage: "20",
+                        Date: "2021-10-10",
+                        Note: "note"
+                    }
+                ]
+            }
+            <div> */}
+                {
+                    paymentMethods?.map((pm: any) => {
+                        console.log(pm)
+                        if(selectedInstallment != pm?.PaymentMethodId) return
+                        return (
+                            <div key={pm?.PaymentMethodId}>
+                                <h1>Payment Method {pm?.PaymentMethodId}</h1>
+                                <table className="table-fixed">
+                                    <thead>
+                                        <tr>
+                                            <th className="px-4 py-2 text-emerald-600">Batch</th>
+                                            <th className="px-4 py-2 text-emerald-600">Payment Date</th>
+                                            <th className="px-4 py-2 text-emerald-600">Percentage</th>
+                                            <th className="px-4 py-2 text-emerald-600">Note</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            pm?.details.map((detail: any) => {
+                                                console.log(detail)
+                                                return (
+                                                    <tr key={detail?.PaymentOptionId}>
+                                                        <td className="border px-4 py-2">{detail?.PaymentOption?.Batch}</td>
+                                                        <td className="border px-4 py-2">{detail?.PaymentOption?.Date}</td>
+                                                        <td className="border px-4 py-2">{detail?.PaymentOption?.Percentage}</td>
+                                                        <td className="border px-4 py-2">{detail?.PaymentOption?.Note}</td>
+                                                    </tr>
+                                                )
+                                            })
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        )
+                    })
+                }
         </div>
     )
 }

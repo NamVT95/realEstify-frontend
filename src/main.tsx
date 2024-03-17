@@ -34,6 +34,9 @@ import CreateAgencyPage from './pages/admin-dashboard/agency/components/CreateAg
 import UpdateAgencyPage from './pages/admin-dashboard/agency/components/UpdateAgencyPage.tsx';
 import ViewProfilePage from './pages/profile/viewProfile.tsx';
 import BookingHistory from './pages/profile/BookingHistory.tsx';
+import { PaymentMethodPage } from './pages/admin-dashboard/project/PaymentMethodPage.tsx';
+import PaymentMethodDetailPage from './pages/admin-dashboard/project/PaymentMethodDetailPage.tsx';
+import CreatePaymentMethod from './pages/admin-dashboard/project/CreatePaymentMethod.tsx';
 
 const router = createBrowserRouter([
   {
@@ -143,6 +146,18 @@ const router = createBrowserRouter([
       {
         path: "project/:id",
         element: <ProjectDetail />,
+      },
+      {
+        path: "project/:id/payment-method",
+        element: <PaymentMethodPage />,
+      },
+      {
+        path: "project/:id/payment-method/create",
+        element: <CreatePaymentMethod />,
+      },
+      {
+        path: "project/:id/payment-method/:payId",
+        element: <PaymentMethodDetailPage />,
       }
     ],
   },
