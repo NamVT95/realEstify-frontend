@@ -86,7 +86,7 @@ export default function ViewPayment() {
             </Card>
           ) : (
             <>
-              {payments.map((payment: any) => {
+              {payments.map((payment: any, index) => {
                 return (
                   <Card>
                     <CardHeader>
@@ -95,7 +95,7 @@ export default function ViewPayment() {
                           <div className="font-bold flex gap-2">
                             Payment Id: {payment.PaymentProcessDetailId} -{" "}
                             <div className="font-bold">
-                              Lần thứ: {payment.Time}
+                              Lần thứ: {index + 1}
                             </div>
                           </div>
 
