@@ -154,7 +154,7 @@ export default function BookingHistory() {
                     Booking History
                 </h1>
 
-                <div className="grid grid-cols-2 p-8 gap-4">
+                <div className="grid p-8 gap-4">
                     <div className="rounded-md bg-white border shadow container col-span-1">
                         {
                             bookings.length > 0 ? (

@@ -33,27 +33,28 @@ const CreatePaymentTable: React.FC = () => {
       note: "Thanh toán đợt 3",
     },
   ]);
-  const {id} = useParams()
+  const { id } = useParams();
   const [newItem, setNewItem] = useState<TableItem>({
     batch: null,
     date: "",
     percentage: 0,
     note: "",
   });
-  const [pmindex, setPmindex] = useState(0)
+  const [pmindex, setPmindex] = useState(0);
 
   React.useEffect(() => {
-    axios.get(`http://localhost:4000/api/investor/payment-options/${id}`)
-    .then((res) => {
-      // setData(res.data)
-      const convertedData = convertPaymentMethod(res.data?.data) as any[];
-      console.log(convertedData);
-      setPmindex((1 + +convertedData?.length) || 0);
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-  }, [])
+    axios
+      .get(`http://localhost:4000/api/investor/payment-options/${id}`)
+      .then((res) => {
+        // setData(res.data)
+        const convertedData = convertPaymentMethod(res.data?.data) as any[];
+        console.log(convertedData);
+        setPmindex(1 + +convertedData?.length || 0);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const [isDateInput, setIsDateInput] = useState(true);
 
@@ -67,6 +68,31 @@ const CreatePaymentTable: React.FC = () => {
   };
 
   const handleAddItem = () => {
+    //check date ís latest
+    if (isDateInput) {
+
+
+      const latestDate = data.reduce(
+        (maxDate, item) => {
+          const dateRegex = /^(19|20)\d\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/;
+          if (!dateRegex.test(item.date)) {
+            console.log("item.date", item.date)
+            return maxDate;
+          }else{
+            console.log("item.date", item.date, new Date(item.date) > new Date(maxDate))
+            return new Date(item.date) > new Date(maxDate) ? item.date : maxDate
+          }
+        },
+        "1900-01-01"
+      );
+      console.log(latestDate)
+      if (new Date(newItem.date) < new Date(latestDate)) {
+        alert("The date must not be before the latest date");
+        return;
+      }
+    }
+
+
     const totalPercentage = data.reduce(
       (sum, item) => +sum + +item.percentage,
       +newItem.percentage
@@ -77,7 +103,8 @@ const CreatePaymentTable: React.FC = () => {
       alert("The total percentage must not exceed 100%");
       return;
     }
-    const newbatch = data.length > 0 ? (data[data.length - 1]?.batch ?? 0) + 1 : 1;
+    const newbatch =
+      data.length > 0 ? (data[data.length - 1]?.batch ?? 0) + 1 : 1;
     setData([...data, { ...newItem, batch: newbatch }]);
     setNewItem({
       batch: null,
@@ -111,7 +138,7 @@ const CreatePaymentTable: React.FC = () => {
       setData(updatedData);
     }
   };
-const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleSubmit = () => {
     // check if the total percentage is 100
     const totalPercentage = data.reduce(
@@ -124,53 +151,63 @@ const navigate = useNavigate()
     }
     console.log(data);
 
-    
-
-    axios.post("http://localhost:4000/api/investor/payment-option-for-project", {
-      "projectId": id,
-      "paymentMethod": pmindex,
-      "paymentOptions": data
-    })
-    .then(res => {
-      console.log(res)
-      toast.success("Create payment method successfully")
-      navigate("/admin-dashboard/project/"+ id +"/payment-method")
-
-    })
-    .catch(err => {
-      console.log(err)
-      toast.error("Create payment method failed" + err?.response?.data?.message)
-    })
+    axios
+      .post("http://localhost:4000/api/investor/payment-option-for-project", {
+        projectId: id,
+        paymentMethod: pmindex,
+        paymentOptions: data,
+      })
+      .then((res) => {
+        console.log(res);
+        toast.success("Create payment method successfully");
+        navigate("/admin-dashboard/project/" + id + "/payment-method");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(
+          "Create payment method failed" + err?.response?.data?.message
+        );
+      });
   };
 
   return (
     <div>
-      <table className="table-fixed">
-        <thead>
+      <table className="min-w-full divide-y divide-gray-200 mt-4">
+        <thead className="bg-gray-50">
           <tr>
-            <th className="px-4 py-2 text-emerald-600">Batch</th>
-            <th className="px-4 py-2 text-emerald-600">Payment Date</th>
-            <th className="px-4 py-2 text-emerald-600">Percentage</th>
-            <th className="px-4 py-2 text-emerald-600">Note</th>
-            <th className="px-4 py-2 text-emerald-600">Actions</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Batch
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Payment Date
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Percentage
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Note
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody>
           {data.map((item) => (
             <tr key={item.batch}>
-              <td className="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium">
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                 {item.batch}
               </td>
-              <td className="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium">
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                 {item.date}
               </td>
-              <td className="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium">
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                 {item.percentage}
               </td>
-              <td className="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium">
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                 {item.note}
               </td>
-              <td className="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium space-x-4">
+              <td className="flex gap-4">
                 <Button onClick={() => handleEditItem(item)}>Edit</Button>
                 <Button onClick={() => handleDeleteItem(item?.batch ?? 0)}>
                   Delete
@@ -199,13 +236,13 @@ const navigate = useNavigate()
               ) : (
                 <div>
                   <p>Thông tin:</p>
-                <input
-                  type="text"
-                  name="date"
-                  value={newItem.date || ""}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2"
-                />
+                  <input
+                    type="text"
+                    name="date"
+                    value={newItem.date || ""}
+                    onChange={handleInputChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2"
+                  />
                 </div>
               )}
             </label>

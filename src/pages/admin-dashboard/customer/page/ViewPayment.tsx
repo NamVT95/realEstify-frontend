@@ -9,6 +9,7 @@ import { Badge } from "antd";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/formatting";
+import { convertPaymentMethod } from "../../project/PaymentMethodPage";
 
 export default function ViewPayment() {
   const [booking, setBooking] = React.useState([]);
@@ -17,36 +18,63 @@ export default function ViewPayment() {
 
   const [payments, setPayments] = React.useState<any[]>([]);
   const [message, setMessage] = React.useState("");
+  const [allPaymentmethod, setAllPaymentmethod] = React.useState<any[]>([]);
 
   useEffect(() => {
     axios
       .get("http://localhost:4000/api/booking")
       .then((res) => {
         console.log(res?.data?.data);
+        console.log(res?.data?.data?.find((data: any) => data.BookingId == bookingId)?.ProjectId);
         console.log(
           res?.data?.data?.filter((data: any) => data.CustomerId == id)
         );
         setBooking(
           res?.data?.data?.filter((data: any) => data.CustomerId == id)
         );
+
+        return res?.data?.data?.find((data: any) => data.BookingId == bookingId)?.ProjectId
+      })
+      .then(data => {
+        axios
+          .get(
+            `http://localhost:4000/api/investor/payment-options/${data}`
+          )
+          .then((res) => {
+            console.log(res.data?.data);
+            console.log(convertPaymentMethod(res.data?.data));
+            setAllPaymentmethod(convertPaymentMethod(res.data?.data));
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
-    useEffect(() => {
-        axios.get("http://localhost:4000/api/customer/debt/" + bookingId)
-        .then(res => {
-            console.log(res?.data?.response?.data)
-            setPayments(res?.data?.response?.data)
-        })
-        .catch(err => {
-            console.log(err)
-            setPayments([])
-            setMessage("Không có đợt trả góp của booking có id: " + bookingId)
-        })
-    }, []);
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/api/customer/debt/" + bookingId)
+      .then((res) => {
+        console.log(res);
+        setPayments(res?.data?.response?.data);
+        console.log(res?.data?.response?.data);
+        return res?.data?.response?.data;
+      })
+      .then((data) => {
+        console.log(data);
+        
+      })
+      .catch((err) => {
+        console.log(err);
+        setPayments([]);
+        setMessage("Không có đợt trả góp của booking có id: " + bookingId);
+      });
+    console.log(bookingId);
+  }, []);
+
 
 
     const handlePayment = (id: number) => {
@@ -54,7 +82,9 @@ export default function ViewPayment() {
         .then(res => {
             console.log(res)
             toast.success("Xác nhận thanh toán thành công")
-            window.location.reload()
+            setTimeout(() => {
+                window.location.reload()
+            }, 1000)
         })
         .catch(err => {
             console.log(err)
@@ -86,53 +116,110 @@ export default function ViewPayment() {
             </Card>
           ) : (
             <>
-              {payments.map((payment: any, index) => {
-                return (
-                  <Card>
-                    <CardHeader>
-                      <div className="flex justify-between gap-4">
-                        <div className="flex flex-col justify-between">
-                          <div className="font-bold flex gap-2">
-                            Payment Id: {payment.PaymentProcessDetailId} -{" "}
-                            <div className="font-bold">
-                              Lần thứ: {index + 1}
-                            </div>
-                          </div>
+              {allPaymentmethod?.map((paymentMethod) => {
+        if(paymentMethod?.details[0]?.PaymentMethod != payments[0]?.PaymentProcess?.PaymentMethod) return null;
 
-                          <div className="font-bold">
-                            Số tiền: {formatPrice(payment?.Amount)}
-                          </div>
-                          <div className="font-bold">
-                            Hạn trả:{" "}
-                            {payment.PaymentDate != null
-                              ? format(
-                                  new Date(payment.PaymentDate),
-                                  "dd/MM/yyyy"
-                                )
-                              : null}
-                          </div>
-                        </div>
-                        <div className="flex gap-4 flex-col">
-                          <Badge className="p-2 rounded-full bg-primary text-white font-semibold">
-                            {payment.Status}
-                          </Badge>
-
-                          {
-                            payment?.Status == "Paid" ? <></> : (
-                                <Button onClick={() => handlePayment(payment?.PaymentProcessDetailId)}>
-                                    Xác nhận đã thanh toán
-                                </Button>
-                            )
-                          }
-                        </div>
-                      </div>
-                      <div className="font-bold">
-                        Description: {payment.Description}
-                      </div>
-                    </CardHeader>
-                  </Card>
-                );
-              })}
+        return (
+          <div>
+            <h1>{paymentMethod.PaymentMethod}</h1>
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Batch
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Percentage
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Thông tin
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Note
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Price
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Status
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {paymentMethod?.details?.map((detail, index) => (
+                  <tr key={detail.id}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {detail.PaymentOption.Batch}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {detail.PaymentOption.Percentage}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {detail.PaymentOption.Date}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {detail.PaymentOption.Note}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {index == 0 ? (
+                        formatPrice(
+                          ((detail.PaymentOption.Percentage / 100) *
+                          payments[0]?.PaymentProcess?.TotalAmount)
+                         - 10000000) 
+                      ) : (
+                        formatPrice(
+                          (detail.PaymentOption.Percentage / 100) *
+                          payments[0]?.PaymentProcess?.TotalAmount
+                        )
+                      )}
+                    </td>
+                    <td className="py-4 whitespace-nowrap text-sm font-medium flex items-center justify-center">
+                      <Badge className="p-2 rounded-full bg-primary text-white font-semibold">
+                        {
+                          payments[index]?.Status
+                        }
+                      </Badge>
+                    </td>
+                    <td>
+                      {
+                        payments[index]?.Status != "Paid" && (
+                          <Button onClick={() => handlePayment(payments[index]?.PaymentProcessDetailId)} className="bg-primary text-white p-2 rounded-md">
+                            Xác nhận thanh toán
+                          </Button>
+                        )
+                      }
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      })}
             </>
           )}
         </div>

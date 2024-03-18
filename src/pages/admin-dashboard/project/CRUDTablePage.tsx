@@ -98,30 +98,30 @@ const CRUDTable: React.FC = () => {
   return (
     <div>
       <h2>CRUD Table</h2>
-      <table className="table-fixed">
-        <thead>
+      <table  className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
           <tr>
-            <th className="px-4 py-2 text-emerald-600">ID</th>
-            <th className="px-4 py-2 text-emerald-600">Phase</th>
-            <th className="px-4 py-2 text-emerald-600">Payment Date</th>
-            <th className="px-4 py-2 text-emerald-600">Percentage</th>
-            <th className="px-4 py-2 text-emerald-600">Note</th>
-            <th className="px-4 py-2 text-emerald-600">Actions</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phase</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Date</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Percentage</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Note</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
         <tbody>
           {data.map((item) => (
             <tr key={item.id}>
-              <td className="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium">
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {item.id}
               </td>
-              <td className="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium">
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {item.phase}
               </td>
-              <td className="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium">
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {item.paymentDate}
               </td>
-              <td className="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium">
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {item.percentage}
               </td>
               <td className="border border-emerald-500 px-4 py-2 text-emerald-600 font-medium">

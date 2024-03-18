@@ -137,13 +137,13 @@ export default function SelectPropertyForBooking() {
                         return (
                             <div key={pm?.PaymentMethodId}>
                                 <h1>Payment Method {pm?.PaymentMethodId}</h1>
-                                <table className="table-fixed">
-                                    <thead>
+                                <table className="min-w-full divide-y divide-gray-200">
+                                    <thead className="bg-gray-50">
                                         <tr>
-                                            <th className="px-4 py-2 text-emerald-600">Batch</th>
-                                            <th className="px-4 py-2 text-emerald-600">Payment Date</th>
-                                            <th className="px-4 py-2 text-emerald-600">Percentage</th>
-                                            <th className="px-4 py-2 text-emerald-600">Note</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Batch</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Date/Info</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Percentage</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Note</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -152,10 +152,10 @@ export default function SelectPropertyForBooking() {
                                                 console.log(detail)
                                                 return (
                                                     <tr key={detail?.PaymentOptionId}>
-                                                        <td className="border px-4 py-2">{detail?.PaymentOption?.Batch}</td>
-                                                        <td className="border px-4 py-2">{detail?.PaymentOption?.Date}</td>
-                                                        <td className="border px-4 py-2">{detail?.PaymentOption?.Percentage}</td>
-                                                        <td className="border px-4 py-2">{detail?.PaymentOption?.Note}</td>
+                                                        <td className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{detail?.PaymentOption?.Batch}</td>
+                                                        <td className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{detail?.PaymentOption?.Date}</td>
+                                                        <td className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{detail?.PaymentOption?.Percentage}</td>
+                                                        <td className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{detail?.PaymentOption?.Note}</td>
                                                     </tr>
                                                 )
                                             })
