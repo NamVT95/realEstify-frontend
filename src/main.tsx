@@ -37,6 +37,7 @@ import BookingHistory from './pages/profile/BookingHistory.tsx';
 import { PaymentMethodPage } from './pages/admin-dashboard/project/PaymentMethodPage.tsx';
 import PaymentMethodDetailPage from './pages/admin-dashboard/project/PaymentMethodDetailPage.tsx';
 import CreatePaymentMethod from './pages/admin-dashboard/project/CreatePaymentMethod.tsx';
+import ViewPaymentTable from './pages/admin-dashboard/project/ViewPaymentTable.tsx';
 
 const router = createBrowserRouter([
   {
@@ -157,6 +158,10 @@ const router = createBrowserRouter([
       },
       {
         path: "project/:id/payment-method/:payId",
+        element: <ViewPaymentTable />,
+      },
+      {
+        path: "project/:id/payment-method/:payId/update",
         element: <PaymentMethodDetailPage />,
       }
     ],
