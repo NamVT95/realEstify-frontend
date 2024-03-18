@@ -97,7 +97,7 @@ export const columns: ColumnDef<DataType>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem><Link to={`/admin-dashboard/project/${id}/payment-method/${row.getValue("PaymentMethodId")}`}>View Payment Method</Link></DropdownMenuItem>
-            <DropdownMenuItem>Update</DropdownMenuItem>
+            <DropdownMenuItem asChild><Link to={`/admin-dashboard/project/${id}/payment-method/${row.getValue("PaymentMethodId")}/update`}>Edit</Link></DropdownMenuItem>
             <DropdownMenuItem>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

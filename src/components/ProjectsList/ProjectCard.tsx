@@ -42,10 +42,10 @@ export default function ProjectCard({ project }: PropertysCardProps) {
 
 
     return (
-        <Card className="justify-self-stretch">
-            <Link to={`/detail/${project.ProjectId}`} className="col-span-1 h-[250px]">
+        <Card className="mb-20">
+            <Link to={`/detail/${project.ProjectId}`} className="col-span-1">
                 <div className="hover:cursor-pointer h-full relative">
-                    <img src={project.Thumbnail || Background} alt={project.Name} className="object-cover h-full w-full rounded-md" />
+                    <img src={project.Thumbnail || Background} alt={project.Name} className="object-cover h-full w-full rounded-md min-h-[250px]" />
                     {
                        (new Date(response?.StartDate) && ((new Date(response?.StartDate)) < new Date())) ? 
                        <div className="py-2 px-4 rounded-tr-md rounded-bl-md bg-green-200 text-green-500 absolute top-0 right-0 font-bold">Đang mở bán</div>
