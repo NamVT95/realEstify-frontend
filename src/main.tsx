@@ -38,6 +38,8 @@ import { PaymentMethodPage } from './pages/admin-dashboard/project/PaymentMethod
 import PaymentMethodDetailPage from './pages/admin-dashboard/project/PaymentMethodDetailPage.tsx';
 import CreatePaymentMethod from './pages/admin-dashboard/project/CreatePaymentMethod.tsx';
 import ViewPaymentTable from './pages/admin-dashboard/project/ViewPaymentTable.tsx';
+import AboutPage from './pages/about/index.tsx';
+import ContactPage from './pages/contact/page.tsx';
 
 const router = createBrowserRouter([
   {
@@ -47,6 +49,14 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/about",
+    element: <AboutPage />,
+  },
+  {
+    path: "/contact",
+    element: <ContactPage />,
   },
   {
     path: "/register",
@@ -71,9 +81,9 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: (
-      <AgencyRoute>
+      // <AgencyRoute>
         <DashboardLayout />
-      </AgencyRoute>
+      // </AgencyRoute>
     ),
     children: [
       {

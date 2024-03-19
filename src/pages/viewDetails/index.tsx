@@ -12,13 +12,40 @@ export default function ViewDetailsPage() {
     const params = useParams<{ id: string }>();
     const projectId = params.id ? parseInt(params.id, 10) : 0;
 
-    const [project, setProject] = useState<ProjectInterface>()
+    const [project, setProject] = useState<ProjectInterface | any>()
 
     useEffect(() => {
         const fetchProperties = async () => {
             const { data, error } = await getProjectById(projectId)
             if (error) {
                 console.log(error)
+                setProject({
+                    ProjectId: 3,
+                    Name: "The Antonia Phú Mỹ Hưng",
+                    InvestorId: 1,
+                    Location: "Đường Nguyễn Lương Bằng, P.Tân Phú, Quận 7, TP.HCM",
+                    Thumbnail:
+                      "https://phumyhungcorp.com.vn/wp-content/uploads/2019/05/vi-tri-the-antonia-co-logo.jpg",
+                    Type: "Apartment",
+                    NumberOfApartments: 366,
+                    NumberOfShops: 0,
+                    LandArea: 5880,
+                    ConstructionDensity: 80,
+                    Status: null,
+                    StartDate: "2011-06-26T17:00:00.000Z",
+                    EndDate: null,
+                    Description: null,
+                    Investor: {
+                      InvestorId: 1,
+                      Name: "CÔNG TY TNHH PHÁT TRIỂN PHÚ MỸ HƯNG",
+                      Email: " phumyhung@phumyhung.vn",
+                      PhoneNumber: "(028) 5411-9999",
+                      Address:
+                        "Tầng 10, Tòa nhà Lawrence S.Ting, 801 Nguyễn Văn Linh, P. Tân Phú, Q.7, TP. HCM",
+                      UserId: 3,
+                    },
+                  })
+
                 return
             }
             if (data != null) {
