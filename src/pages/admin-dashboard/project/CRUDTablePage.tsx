@@ -172,7 +172,9 @@ const CRUDTable: React.FC = () => {
 
   return (
     <div>
-      <h2>CRUD Table</h2>
+      {/* back  */}
+      <Button onClick={() => window.history.back()}>Back</Button>
+      <h2 className="mt-4">Update Payment Method</h2>
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>

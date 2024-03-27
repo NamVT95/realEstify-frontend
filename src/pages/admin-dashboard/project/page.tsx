@@ -14,8 +14,8 @@ export default function Project() {
   useEffect(() => {
     axios.get("http://localhost:4000/api/project")
       .then(res => {
-        setProject(res?.data?.response?.data?.filter((item:any) => item?.Status != "Deleted") || [])
-        console.log(res?.data?.response?.data?.filter((item:any) => item?.Status != "Deleted"))
+        setProject(res?.data?.response?.data || [])
+        console.log(res?.data?.response?.data)
       })
   }, [trigger])
 

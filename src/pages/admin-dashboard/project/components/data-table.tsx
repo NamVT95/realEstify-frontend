@@ -183,6 +183,25 @@ export const columns: ColumnDef<DataType>[] = [
     ),
   },
   {
+    accessorKey: "Status",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Status
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) =>  <>{
+      row.getValue("Status") == "Deleted" ? <span className="rounded-full bg-red-200 text-red-500 py-1 px-2">Đã bán hết</span>  : <>{
+        row.getValue("Status") == null ? <span className="rounded-full bg-blue-200 text-blue-500 py-1 px-2">Chưa bán</span> : <span className="rounded-full bg-slate-200 text-slate-500 py-1 px-2">{row.getValue("Status")}</span>
+      }</>
+    }</>,
+  },
+  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
@@ -216,7 +235,7 @@ export const columns: ColumnDef<DataType>[] = [
                 console.log(err)
                 toast.error(err?.response?.data?.message || "Delete failed")
               })
-            }}>Delete</DropdownMenuItem>
+            }}>Đóng mở bán</DropdownMenuItem>
             <DropdownMenuItem onClick={() => {
               dispatch(openUpdateForm({ projectId: DataType.ProjectId }))
             }}>Set open sale</DropdownMenuItem>

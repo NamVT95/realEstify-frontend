@@ -19,6 +19,7 @@ export default function ProjectCard({ project }: PropertysCardProps) {
     console.log(project)
 
     const [response, setResponse] = useState<any>({})
+    console.log(project)
 
     const getOpeningForSale = async () => {
         try {
@@ -50,7 +51,15 @@ export default function ProjectCard({ project }: PropertysCardProps) {
                        (new Date(response?.StartDate) && ((new Date(response?.StartDate)) < new Date())) ? 
                        <div className="py-2 px-4 rounded-tr-md rounded-bl-md bg-green-200 text-green-500 absolute top-0 right-0 font-bold">Đang mở bán</div>
                         : 
-                        <div className="py-2 px-4 rounded-tr-md rounded-bl-md bg-red-200 text-red-500 absolute top-0 right-0 font-bold">Chưa mở bán</div>
+                        <>
+                            {
+                                project?.Status == "Deleted" ? (
+                                    <div className="py-2 px-4 rounded-tr-md rounded-bl-md bg-red-200 text-red-500 absolute top-0 right-0 font-bold">Bán hết</div>
+                                ) : (
+                                    <div className="py-2 px-4 rounded-tr-md rounded-bl-md bg-blue-200 text-blue-500 absolute top-0 right-0 font-bold">Chưa mở bán</div>
+                                )
+                            }
+                        </>
 }
                 </div>
             </Link>
