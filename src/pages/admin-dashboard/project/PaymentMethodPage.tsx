@@ -15,6 +15,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table"
 import * as React from "react"
+import qs from "qs"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -37,6 +38,7 @@ import { openUpdateForm } from "@/store/project/updateProjectSlice"
 import { format, set } from "date-fns"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import axios from "axios"
+import { toast } from "react-toastify"
 
 export const convertPaymentMethod = (data:any) => {
   const result = [];
@@ -98,7 +100,29 @@ export const columns: ColumnDef<DataType>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem><Link to={`/admin-dashboard/project/${id}/payment-method/${row.getValue("PaymentMethodId")}`}>View Payment Method</Link></DropdownMenuItem>
             <DropdownMenuItem asChild><Link to={`/admin-dashboard/project/${id}/payment-method/${row.getValue("PaymentMethodId")}/update`}>Edit</Link></DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem 
+              onClick={() => {
+                const options = {
+                  method: 'DELETE',
+                  headers: { 'content-type': 'application/x-www-form-urlencoded' },
+                  data: qs.stringify({
+                    projectId: id,
+                    paymentMethod: row.getValue("PaymentMethodId")
+                  }),
+                  url: "http://localhost:4000/api/investor/payment-option",
+                };
+                axios(options)
+                .then((res) => {
+                  console.log(res)
+                  toast.success("Delete success")
+                  window.location.reload()
+                })
+                .catch((err) => {
+                  toast.error(err?.response?.data?.message || "Delete failed")
+                })
+              }}
+            
+            >Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )

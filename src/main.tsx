@@ -40,6 +40,7 @@ import CreatePaymentMethod from './pages/admin-dashboard/project/CreatePaymentMe
 import ViewPaymentTable from './pages/admin-dashboard/project/ViewPaymentTable.tsx';
 import AboutPage from './pages/about/index.tsx';
 import ContactPage from './pages/contact/page.tsx';
+import UpdateProject from './pages/admin-dashboard/project/UpdateProject.tsx';
 
 const router = createBrowserRouter([
   {
@@ -157,6 +158,10 @@ const router = createBrowserRouter([
       {
         path: "project/:id",
         element: <ProjectDetail />,
+      },
+      {
+        path: "project/:id/update",
+        element: <UpdateProject />,
       },
       {
         path: "project/:id/payment-method",

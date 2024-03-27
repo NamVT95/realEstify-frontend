@@ -41,10 +41,7 @@ export default function CreateProjectPage() {
           <input type="text" placeholder="Name" {...register("Name", {})} className='py-2 px-4'/>
           <label htmlFor="InvestorId">InvestorId</label>
           <select {...register("InvestorId")}>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
+            <option value="1">Investor_1</option>
           </select>
           <label htmlFor="Location">Location</label>
           <input type="text" placeholder="Location" {...register("Location", {})} className='py-2 px-4'/>

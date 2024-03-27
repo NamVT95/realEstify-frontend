@@ -39,6 +39,8 @@ import { useAppDispatch } from "@/hooks/useStore"
 import { openUpdateForm } from "@/store/project/updateProjectSlice"
 import { format } from "date-fns"
 import { Link } from "react-router-dom"
+import axios from "axios"
+import { toast } from "react-toastify"
 
 // {
 //   ProjectId: 3,
@@ -198,8 +200,23 @@ export const columns: ColumnDef<DataType>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem><Link to={`/admin-dashboard/project/${row.getValue("ProjectId")}`}>View Details</Link></DropdownMenuItem>
             <DropdownMenuItem><Link to={`/admin-dashboard/project/${row.getValue("ProjectId")}/payment-method`}>View Payment Method</Link></DropdownMenuItem>
-            <DropdownMenuItem>Update</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to={`/admin-dashboard/project/${row.getValue("ProjectId")}/update`}>Update</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {
+              axios.delete(`http://localhost:4000/api/investor/project/${DataType.ProjectId}`)
+              .then(res => {
+                console.log(res)
+                toast.success("Delete success")
+                setTimeout(() => {
+                  window.location.reload()
+                }, 1000)
+              })
+              .catch(err => {
+                console.log(err)
+                toast.error(err?.response?.data?.message || "Delete failed")
+              })
+            }}>Delete</DropdownMenuItem>
             <DropdownMenuItem onClick={() => {
               dispatch(openUpdateForm({ projectId: DataType.ProjectId }))
             }}>Set open sale</DropdownMenuItem>
