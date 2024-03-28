@@ -98,30 +98,30 @@ export default function UpdateProject() {
                 <option value="1">Investor_1</option>
             </select>
             <label htmlFor="Location">Location</label>
-            <input disabled type="text" placeholder="Location" {...register("Location", {})} className='py-2 px-4'/>
+            <input  type="text" placeholder="Location" {...register("Location", {})} className='py-2 px-4'/>
             <label htmlFor="Thumbnail">Thumbnail</label>
-            <input disabled type="text" placeholder="Thumbnail" {...register("Thumbnail", {})} className='py-2 px-4'/>
+            <input  type="text" placeholder="Thumbnail" {...register("Thumbnail", {})} className='py-2 px-4'/>
             <label htmlFor="Type">Type</label>
-            <select {...register("Type")} disabled>
+            <select {...register("Type")} >
               <option value="Apartment">Apartment</option>
               <option value="Villa">Villa</option>
             </select>
           </div>
           <div className='flex flex-col gap-4'>
             <label htmlFor="NumberOfApartments">NumberOfApartments</label>
-            <input disabled type="number" placeholder="NumberOfApartments" {...register("NumberOfApartments", {})} className='py-2 px-4'/>
+            <input  type="number" placeholder="NumberOfApartments" {...register("NumberOfApartments", {})} className='py-2 px-4'/>
             <label htmlFor="NumberOfShops">NumberOfShops</label>
-            <input disabled type="number" placeholder="NumberOfShops" {...register("NumberOfShops", {})} className='py-2 px-4'/>
+            <input  type="number" placeholder="NumberOfShops" {...register("NumberOfShops", {})} className='py-2 px-4'/>
             <label htmlFor="LandArea">LandArea</label>
-            <input disabled type="number" placeholder="LandArea" {...register("LandArea", {})} className='py-2 px-4'/>
+            <input  type="number" placeholder="LandArea" {...register("LandArea", {})} className='py-2 px-4'/>
             <label htmlFor="ConstructionDensity">ConstructionDensity</label>
-            <input disabled type="number" placeholder="ConstructionDensity" {...register("ConstructionDensity", {})} className='py-2 px-4'/>
+            <input  type="number" placeholder="ConstructionDensity" {...register("ConstructionDensity", {})} className='py-2 px-4'/>
             <label htmlFor="Status">Status</label>
-            <input disabled type="text" placeholder="Status" {...register("Status", {})} className='py-2 px-4'/>
+            <input  type="text" placeholder="Status" {...register("Status", {})} className='py-2 px-4'/>
             <label htmlFor="Status">StartDate</label>
-            <input disabled type="date" placeholder="StartDate" {...register("StartDate", {})} className='py-2 px-4'/>
+            <input  type="date" placeholder="StartDate" {...register("StartDate", {})} className='py-2 px-4'/>
             <label htmlFor="Status">EndDate</label>
-          <input disabled type="date" placeholder="EndDate" {...register("EndDate", {})} className='py-2 px-4'/>
+          <input  type="date" placeholder="EndDate" {...register("EndDate", {})} className='py-2 px-4'/>
   
           </div>
           

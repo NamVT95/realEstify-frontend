@@ -9,6 +9,8 @@ import Background from "@/assets/hero.jpg"
 import { axiosClient } from "@/lib/api/config/axiosClient";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
+import { getProjects } from "@/lib/api/project";
+import { toast } from "react-toastify";
 
 interface PropertysCardProps {
     project: ProjectInterface;
@@ -41,6 +43,7 @@ export default function ProjectCard({ project }: PropertysCardProps) {
         getOpeningForSale()
     }, [])
 
+    
 
     return (
         <Card className="mb-20">
@@ -49,7 +52,15 @@ export default function ProjectCard({ project }: PropertysCardProps) {
                     <img src={project.Thumbnail || Background} alt={project.Name} className="object-cover h-full w-full rounded-md min-h-[250px]" />
                     {
                        (new Date(response?.StartDate) && ((new Date(response?.StartDate)) < new Date())) ? 
-                       <div className="py-2 px-4 rounded-tr-md rounded-bl-md bg-green-200 text-green-500 absolute top-0 right-0 font-bold">Đang mở bán</div>
+                       <>
+                            {
+                                project?.Status == "Deleted" ? (
+                                    <div className="py-2 px-4 rounded-tr-md rounded-bl-md bg-red-200 text-red-500 absolute top-0 right-0 font-bold">Bán hết</div>
+                                ) : (
+                                    <div className="py-2 px-4 rounded-tr-md rounded-bl-md bg-green-200 text-green-500 absolute top-0 right-0 font-bold">Đang mở bán</div>
+                                )
+                            }
+                        </>
                         : 
                         <>
                             {

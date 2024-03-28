@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/select"
 import axios from 'axios';
 import React, { useEffect } from 'react';
+import { getProjects } from '@/lib/api/project';
 
 
 interface BookingFormProps {
@@ -105,6 +106,7 @@ function BookingForm({ projectId }: BookingFormProps) {
 
 
     const handleBooking = () => {
+        // if(booking?.)
         const token = localStorage.getItem('token');
 
         if (token && reduxToken) {
@@ -114,10 +116,33 @@ function BookingForm({ projectId }: BookingFormProps) {
             navigate('/login');
         }
     }
+    const [isDeleted, setIsDeleted] = React.useState(true)
+    useEffect(() => {
+        const init = async () => {
+            getProjects()
+            .then(res => {
+                if(res.error){
+                    toast.error(res.error)
+                    return
+                }
+                console.log(res.data?.response?.data?.find((item: any) => item?.ProjectId == projectId)?.Status == "Deleted")
+                setIsDeleted(res.data?.response?.data?.find((item: any) => item?.ProjectId == projectId)?.Status == "Deleted")
 
+            })
+
+        }
+        init()
+    },[])
+
+    if(isDeleted) return (
+        <div>
+            <h1 className='text-2xl font-semibold text-red-500 flex justify-center items-center w-full h-40'>Dự án này đã bán hết</h1>
+        </div>
+    )
 
     return (
         <form onSubmit={formik.handleSubmit} className="container my-10 space-y-4 col-span-1">
+
             <div className="flex items-center text-2xl font-semibold text-red-500">
                 Booking:
             </div>
